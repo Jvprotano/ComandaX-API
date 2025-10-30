@@ -1,0 +1,6 @@
+@ComandaX.WebAPI_HostAddress = http://localhost:5012
+
+GET {{ComandaX.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

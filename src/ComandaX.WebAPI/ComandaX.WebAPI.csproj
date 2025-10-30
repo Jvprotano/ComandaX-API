@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
+    <PackageReference Include="HotChocolate.Data" Version="15.1.11" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ComandaX.Application\ComandaX.Application.csproj" />
+    <ProjectReference Include="..\ComandaX.Infrastructure\ComandaX.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
