@@ -13,7 +13,7 @@ public sealed class Order  : BaseEntity
     public OrderStatusEnum Status { get; private set; }
     public IList<OrderProduct> OrderProducts { get; set; } = [];
     public Guid TabId { get; set; }
-    public Tab? Tab { get; set; }
+    public CustomerTab? CustomerTab { get; set; }
 
     public void StartPreparation()
     {

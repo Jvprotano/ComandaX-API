@@ -13,9 +13,9 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
         return order;
     }
 
-    public async Task<IList<Order>> GetAllAsync()
+    public Task<IQueryable<Order>> GetAllAsync()
     {
-        return await _context.Orders.ToListAsync();
+        return Task.FromResult(_context.Orders.AsQueryable());
     }
 
     public Task<Order> CreateAsync(Order order)

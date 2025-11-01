@@ -1,8 +1,6 @@
 using Moq;
-using Xunit;
 using ComandaX.Application.Interfaces;
 using ComandaX.Application.Orders.Commands.CreateOrder;
-using ComandaX.Domain.Entities;
 
 namespace ComandaX.Tests.Orders.Commands.CreateOrder;
 

@@ -1,13 +1,12 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Domain.Entities;
 using ComandaX.WebAPI.GraphQL.DataLoaders;
 
 namespace ComandaX.WebAPI.GraphQL.Resolvers;
 
-public class TabResolvers
+public class CustomerTabResolvers
 {
     public async Task<TableDto?> GetTable(
-        [Parent] TabDto tab,
+        [Parent] CustomerTabDto tab,
         GetTableByIdDataLoader dataLoader,
         CancellationToken cancellationToken)
     {

@@ -27,8 +27,8 @@ public class AddProductsToOrderCommandHandlerTests
         var productId = Guid.NewGuid();
         var tabId = Guid.NewGuid();
         var command = new AddProductsToOrderCommand { OrderId = orderId, ProductIds = new List<Guid> { productId } };
-        var order = new Order(tabId);
-        var product = new Product("Test Product", 10, 1);
+        var order = new Order(tabId) { Id = orderId };
+        var product = new Product("Test Product", 10);
 
         _orderRepositoryMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(order);
         _productRepositoryMock.Setup(r => r.GetByIdAsync(productId)).ReturnsAsync(product);

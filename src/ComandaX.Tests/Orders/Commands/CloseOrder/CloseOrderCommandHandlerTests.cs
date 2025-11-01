@@ -1,8 +1,6 @@
 using ComandaX.Application.Interfaces;
 using ComandaX.Application.Orders.Commands.CloseOrder;
-using ComandaX.Domain.Entities;
 using Moq;
-using Xunit;
 
 namespace ComandaX.Tests.Orders.Commands.CloseOrder;
 

@@ -2,11 +2,10 @@ namespace ComandaX.Domain.Entities;
 
 public sealed class Product : BaseEntity
 {
-    public Product(string name, decimal price, int code)
+    public Product(string name, decimal price)
     {
         Name = name;
         Price = price;
-        Code = code;
     }
 
     public string Name { get; private set; }

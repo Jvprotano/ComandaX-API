@@ -2,8 +2,8 @@ namespace ComandaX.Domain.Entities;
 
 public abstract class BaseEntity
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; private set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; private set; } = DateTime.Now;
+    public Guid Id { get; internal set; } = Guid.NewGuid();
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
     public DateTime? DeletedAt { get; private set; }
 }

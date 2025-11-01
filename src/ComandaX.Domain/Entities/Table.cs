@@ -8,6 +8,12 @@ public sealed class Table : BaseEntity
     {
         Code = code;
     }
+
+    public Table()
+    {
+    }
+
+
     public int Code { get; private set; }
     public TableStatusEnum Status { get; private set; } = TableStatusEnum.Free;
 

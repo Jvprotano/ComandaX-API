@@ -16,9 +16,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var maxCode = await _repository.GetMaxCodeAsync();
-
-        var productRequest = new Product(request.Name, request.Price, maxCode + 1);
+        var productRequest = new Product(request.Name, request.Price);
 
         var product = await _repository.AddProductAsync(productRequest);
 

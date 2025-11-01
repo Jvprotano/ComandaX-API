@@ -4,7 +4,7 @@ using MediatR;
 
 namespace ComandaX.Application.Orders.Queries.GetOrders;
 
-public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IList<Order>>
+public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IQueryable<Order>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -13,7 +13,7 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IList<Order
         _orderRepository = orderRepository;
     }
 
-    public async Task<IList<Order>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
+    public async Task<IQueryable<Order>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
         var orders = await _orderRepository.GetAllAsync();
 

@@ -1,5 +1,4 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Domain.Entities;
 
 namespace ComandaX.WebAPI.GraphQL.Types;
 
