@@ -2,16 +2,14 @@ using ComandaX.Domain.Enums;
 
 namespace ComandaX.Domain.Entities;
 
-public sealed class Order
+public sealed class Order  : BaseEntity
 {
     public Order(Guid tabId)
     {
-        Id = Guid.NewGuid();
         TabId = tabId;
         Status = OrderStatusEnum.Created;
     }
 
-    public Guid Id { get; }
     public OrderStatusEnum Status { get; private set; }
     public IList<OrderProduct> OrderProducts { get; set; } = [];
     public Guid TabId { get; set; }

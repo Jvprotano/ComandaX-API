@@ -1,8 +1,8 @@
-using Moq;
-using Xunit;
 using ComandaX.Application.Interfaces;
 using ComandaX.Application.Orders.Commands.AddProductsToOrder;
 using ComandaX.Domain.Entities;
+using Moq;
+using Xunit;
 
 namespace ComandaX.Tests.Orders.Commands.AddProductsToOrder;
 
@@ -25,8 +25,9 @@ public class AddProductsToOrderCommandHandlerTests
         // Arrange
         var orderId = Guid.NewGuid();
         var productId = Guid.NewGuid();
+        var tabId = Guid.NewGuid();
         var command = new AddProductsToOrderCommand { OrderId = orderId, ProductIds = new List<Guid> { productId } };
-        var order = new Order();
+        var order = new Order(tabId);
         var product = new Product("Test Product", 10, 1);
 
         _orderRepositoryMock.Setup(r => r.GetByIdAsync(orderId)).ReturnsAsync(order);

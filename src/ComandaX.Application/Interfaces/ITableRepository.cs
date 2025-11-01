@@ -9,4 +9,6 @@ public interface ITableRepository
     Task<IEnumerable<Table>> GetAllAsync();
     Task<int> GetMaxCodeAsync();
     Task UpdateAsync(Table table);
+    Task<IList<Table>> GetByIdsAsync(IReadOnlyList<Guid> ids);
+
 }

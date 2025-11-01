@@ -1,5 +1,8 @@
+using ComandaX.Domain.Entities;
+
 namespace ComandaX.Application.DTOs;
 
 public sealed record TabDto(
     string Name,
-    string TableCode);
+    Guid? TableId,
+    TableDto Table);

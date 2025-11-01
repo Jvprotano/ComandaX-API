@@ -9,7 +9,7 @@ public class TableRepository(AppDbContext _context) : ITableRepository
     public async Task<Table> AddAsync(Table table)
     {
         var maxCode = await GetMaxCodeAsync();
-        table.Code = maxCode + 1;
+        table.SetCode(maxCode + 1);
 
         await _context.Tables.AddAsync(table);
         return await _context.SaveChangesAsync().ContinueWith(_ => table);
@@ -25,6 +25,12 @@ public class TableRepository(AppDbContext _context) : ITableRepository
         var table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == id);
         return table;
     }
+
+    public async Task<IList<Table>> GetByIdsAsync(IReadOnlyList<Guid> ids)
+    {
+        return await _context.Tables.Where(t => ids.Contains(t.Id)).ToListAsync();
+    }
+
 
     public async Task<int> GetMaxCodeAsync()
     {

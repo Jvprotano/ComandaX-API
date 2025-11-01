@@ -2,16 +2,14 @@ using ComandaX.Domain.Enums;
 
 namespace ComandaX.Domain.Entities;
 
-public sealed class Table
+public sealed class Table : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public int Code { get; set; }
-    public TableStatusEnum Status { get; set; } = TableStatusEnum.Free;
-
     public Table(int code)
     {
         Code = code;
     }
+    public int Code { get; private set; }
+    public TableStatusEnum Status { get; private set; } = TableStatusEnum.Free;
 
     public void SetBusy()
     {
@@ -20,5 +18,10 @@ public sealed class Table
     public void SetFree()
     {
         Status = TableStatusEnum.Free;
+    }
+
+    public void SetCode(int code)
+    {
+        Code = code;
     }
 }
