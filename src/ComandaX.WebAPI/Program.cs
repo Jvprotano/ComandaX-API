@@ -1,25 +1,19 @@
+using Microsoft.EntityFrameworkCore;
 using Application;
-using ComandaX.Application.Interfaces;
-using ComandaX.Infrastructure.Persistence;
-using ComandaX.Infrastructure.Persistence.Repository;
-using ComandaX.WebAPI.GraphQL.Mutations;
-using ComandaX.WebAPI.GraphQL.Queries;
+using ComandaX.Infrastructure;
+using ComandaX.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddInfrastructure();
 
-builder.Services.AddSingleton<DbFake>();
+builder.Services.AddGraphQLServices();
 
-builder.Services.AddGraphQLServer()
-            .AddQueryType(d => d.Name("Query"))
-            .AddType<ProductQuery>()
-            .AddMutationType(d => d.Name("Mutation"))
-            .AddType<ProductMutation>()
-            .AddProjections()
-            .AddFiltering()
-            .AddSorting();
-;
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());
 

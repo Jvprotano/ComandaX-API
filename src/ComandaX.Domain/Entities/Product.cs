@@ -1,14 +1,21 @@
 namespace ComandaX.Domain.Entities;
 
-public sealed class Product(string name, decimal price)
+public sealed class Product
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
-    public string Name { get; private set; } = name;
-    public decimal Price { get; private set; } = price;
+    public Guid Id { get; } = Guid.NewGuid();
+    public string Name { get; private set; }
+    public decimal Price { get; private set; }
     public int Code { get; private set; }
 
-    public void SetNextCode(int lastCode)
+    public Product(string name, decimal price, int code)
     {
-        Code = lastCode + 1;
+        Name = name;
+        Price = price;
+        Code = code;
+    }
+
+    public void SetCode(int code)
+    {
+        Code = code;
     }
 }

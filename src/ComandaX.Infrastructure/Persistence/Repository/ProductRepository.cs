@@ -1,19 +1,35 @@
+using Microsoft.EntityFrameworkCore;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 
 namespace ComandaX.Infrastructure.Persistence.Repository;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository(AppDbContext _context) : IProductRepository
 {
-    public Task<Product> AddProductAsync(Product product) 
-        => Task.FromResult<Product>(DbFake.AddProduct(product));
-
-    public Task<IList<Product>> GetAllAsync() 
-        => Task.FromResult<IList<Product>>(DbFake.GetProducts());
-
-    public Task<Product?> GetProductByIdAsync(Guid id)
+    public async Task<Product> AddProductAsync(Product product)
     {
-        var product = DbFake.GetProducts().FirstOrDefault(p => p.Id == id);
-        return Task.FromResult<Product?>(product);
+        var maxCode = await GetMaxCodeAsync();
+
+        if (product.Code != maxCode + 1)
+            product.SetCode(maxCode + 1);
+
+        await _context.Products.AddAsync(product);
+        return await _context.SaveChangesAsync().ContinueWith(_ => product);
+    }
+
+    public async Task<IList<Product>> GetAllAsync()
+    {
+        return await _context.Products.ToListAsync();
+    }
+
+    public async Task<Product?> GetByIdAsync(Guid id)
+    {
+        return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task<int> GetMaxCodeAsync()
+    {
+        var maxCode = await _context.Products.AnyAsync() ? _context.Products.Max(p => p.Code) : 0;
+        return maxCode;
     }
 }

@@ -1,5 +1,6 @@
+using ComandaX.WebAPI.GraphQL.Mutations;
 using ComandaX.WebAPI.GraphQL.Queries;
-using HotChocolate.Data;
+using ComandaX.WebAPI.GraphQL.Types;
 
 namespace ComandaX.WebAPI.Extensions;
 
@@ -7,15 +8,21 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddGraphQLServices(this IServiceCollection services)
     {
-        // services
-        //     .AddGraphQLServer()
-        //     .AddQueryType(d => d.Name("Query"))
-        //     .AddType<ProductQuery>()
-        //     // .AddMutationType(d => d.Name("Mutation"))
-        //     // .AddType<ProductMutation>()
-        //     .AddProjections()
-        //     .AddFiltering()
-        //     .AddSorting();
+        services
+            .AddGraphQLServer()
+            .AddQueryType(d => d.Name("Query"))
+            .AddType<ProductQuery>()
+            .AddType<TableQuery>()
+            .AddType<OrderQuery>()
+            .AddMutationType(d => d.Name("Mutation"))
+            .AddType<OrderType>()
+            .AddType<TableType>()
+            .AddType<ProductMutation>()
+            .AddType<TableMutation>()
+            .AddType<OrderMutation>()
+            .AddProjections()
+            .AddFiltering()
+            .AddSorting();
 
         return services;
     }
