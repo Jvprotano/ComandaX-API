@@ -22,4 +22,9 @@ public class ProductCategoryRepository(AppDbContext _context) : IProductCategory
     {
         return await _context.ProductCategories.FirstOrDefaultAsync(pc => pc.Id == id);
     }
+
+    public async Task<IReadOnlyList<ProductCategory>> GetByIdsAsync(IReadOnlyList<Guid> keys)
+    {
+        return await _context.ProductCategories.Where(pc => keys.Contains(pc.Id)).ToListAsync();
+    }
 }

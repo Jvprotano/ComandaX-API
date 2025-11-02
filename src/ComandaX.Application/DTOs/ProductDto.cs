@@ -5,4 +5,5 @@ public sealed record ProductDto(
     string Name,
     decimal Price,
     int Code,
-    bool NeedPreparation);
+    bool NeedPreparation,
+    Guid? ProductCategoryId);

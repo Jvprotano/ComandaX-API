@@ -1,5 +1,7 @@
+using ComandaX.WebAPI.GraphQL.DataLoaders;
 using ComandaX.WebAPI.GraphQL.Mutations;
 using ComandaX.WebAPI.GraphQL.Queries;
+using ComandaX.WebAPI.GraphQL.Resolvers;
 using ComandaX.WebAPI.GraphQL.Types;
 
 namespace ComandaX.WebAPI.Extensions;
@@ -29,6 +31,10 @@ public static class ServiceCollectionExtensions
             .AddType<OrderMutation>()
             .AddType<CustomerTabMutation>()
             .AddType<ProductCategoryMutation>()
+            .AddDataLoader<GetTableByIdDataLoader>()
+            .AddDataLoader<GetProductCategoryByIdDataLoader>()
+            .AddResolver<CustomerTabResolvers>()
+            .AddResolver<ProductResolvers>()
             .AddProjections()
             .AddFiltering()
             .AddSorting();

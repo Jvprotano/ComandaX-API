@@ -75,7 +75,7 @@ using (var scope = app.Services.CreateScope())
 
     bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
     if (isDevelopment)
-        await SeedData.GenerateDevTestData();
+        await SeedData.GenerateDevTestData(context);
 }
 
 app.Run();

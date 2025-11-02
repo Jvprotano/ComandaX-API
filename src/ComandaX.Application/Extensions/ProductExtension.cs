@@ -12,7 +12,8 @@ public static class ProductExtension
             product.Name,
             product.Price,
             product.Code,
-            product.NeedPreparation);
+            product.NeedPreparation,
+            product.ProductCategoryId);
     }
 
 }
