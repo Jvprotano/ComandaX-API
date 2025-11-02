@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Application;
 using ComandaX.Infrastructure;
 using ComandaX.WebAPI.Extensions;
@@ -25,6 +28,29 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        )
+    };
+});
+
 var app = builder.Build();
 
 app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
@@ -37,8 +63,19 @@ app.UseRouting();
 
 app.MapGet("/", () => "API running ✅");
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-db.Database.Migrate();
+app.UseAuthentication();
+app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.Migrate();
+
+    await SeedData.SeedAdminsAsync(context);
+
+    bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+    if (isDevelopment)
+        await SeedData.GenerateDevTestData();
+}
 
 app.Run();

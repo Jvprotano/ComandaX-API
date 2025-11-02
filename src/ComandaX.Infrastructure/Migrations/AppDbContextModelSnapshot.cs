@@ -136,15 +136,50 @@ namespace ComandaX.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("NeedPreparation")
+                        .HasColumnType("boolean");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
+
+                    b.Property<Guid?>("ProductCategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductCategoryId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("ComandaX.Domain.Entities.ProductCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("ComandaX.Domain.Entities.Table", b =>
@@ -171,6 +206,34 @@ namespace ComandaX.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tables");
+                });
+
+            modelBuilder.Entity("ComandaX.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ComandaX.Domain.Entities.CustomerTab", b =>
@@ -210,6 +273,15 @@ namespace ComandaX.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ComandaX.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("ComandaX.Domain.Entities.ProductCategory", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductCategoryId");
+
+                    b.Navigation("ProductCategory");
+                });
+
             modelBuilder.Entity("ComandaX.Domain.Entities.CustomerTab", b =>
                 {
                     b.Navigation("Orders");
@@ -218,6 +290,11 @@ namespace ComandaX.Infrastructure.Migrations
             modelBuilder.Entity("ComandaX.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderProducts");
+                });
+
+            modelBuilder.Entity("ComandaX.Domain.Entities.ProductCategory", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

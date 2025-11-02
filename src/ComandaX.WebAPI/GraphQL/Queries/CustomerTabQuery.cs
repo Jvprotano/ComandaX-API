@@ -1,5 +1,5 @@
-using ComandaX.Application.CustomerTabs.Queries.GetCustomerTabById;
-using ComandaX.Application.CustomerTabs.Queries.GetCustomerTabs;
+using ComandaX.Application.Handlers.CustomerTabs.Queries.GetCustomerTabById;
+using ComandaX.Application.Handlers.CustomerTabs.Queries.GetCustomerTabs;
 using ComandaX.Domain.Entities;
 using MediatR;
 

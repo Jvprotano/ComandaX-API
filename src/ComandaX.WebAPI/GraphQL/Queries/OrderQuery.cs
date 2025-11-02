@@ -1,5 +1,5 @@
-using ComandaX.Application.Orders.Queries.GetOrderById;
-using ComandaX.Application.Orders.Queries.GetOrders;
+using ComandaX.Application.Handlers.Orders.Queries.GetOrderById;
+using ComandaX.Application.Handlers.Orders.Queries.GetOrders;
 using ComandaX.Domain.Entities;
 using MediatR;
 

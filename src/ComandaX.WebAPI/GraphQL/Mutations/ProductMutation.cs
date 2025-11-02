@@ -1,5 +1,5 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Products.Commands.CreateProduct;
+using ComandaX.Application.Handlers.Products.Commands.CreateProduct;
 using MediatR;
 
 namespace ComandaX.WebAPI.GraphQL.Mutations;

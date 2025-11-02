@@ -1,6 +1,6 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Products.Queries.GetProductById;
-using ComandaX.Application.Products.Queries.GetProducts;
+using ComandaX.Application.Handlers.Products.Queries.GetProductById;
+using ComandaX.Application.Handlers.Products.Queries.GetProducts;
 using MediatR;
 
 namespace ComandaX.WebAPI.GraphQL.Queries;

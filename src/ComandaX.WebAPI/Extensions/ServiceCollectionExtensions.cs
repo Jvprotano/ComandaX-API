@@ -1,4 +1,3 @@
-using ComandaX.Application.CustomerTabs.Commands.CreateCustomerTab;
 using ComandaX.WebAPI.GraphQL.Mutations;
 using ComandaX.WebAPI.GraphQL.Queries;
 using ComandaX.WebAPI.GraphQL.Types;
@@ -19,6 +18,7 @@ public static class ServiceCollectionExtensions
             .AddMutationType(d => d.Name("Mutation"))
             .AddType<OrderType>()
             .AddType<TableType>()
+            .AddType<AuthMutation>()
             .AddType<ProductMutation>()
             .AddType<TableMutation>()
             .AddType<OrderMutation>()

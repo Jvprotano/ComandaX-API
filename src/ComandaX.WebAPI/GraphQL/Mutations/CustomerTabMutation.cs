@@ -1,4 +1,4 @@
-using ComandaX.Application.CustomerTabs.Commands.CreateCustomerTab;
+using ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
 using ComandaX.Domain.Entities;
 using MediatR;
 

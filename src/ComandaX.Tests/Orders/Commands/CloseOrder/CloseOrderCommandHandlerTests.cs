@@ -1,5 +1,5 @@
+using ComandaX.Application.Handlers.Orders.Commands.CloseOrder;
 using ComandaX.Application.Interfaces;
-using ComandaX.Application.Orders.Commands.CloseOrder;
 using Moq;
 
 namespace ComandaX.Tests.Orders.Commands.CloseOrder;

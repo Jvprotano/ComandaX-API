@@ -1,6 +1,6 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Tables.Queries.GetTableById;
-using ComandaX.Application.Tables.Queries.GetTables;
+using ComandaX.Application.Handlers.Tables.Queries.GetTableById;
+using ComandaX.Application.Handlers.Tables.Queries.GetTables;
 using MediatR;
 
 namespace ComandaX.WebAPI.GraphQL.Queries;

@@ -6,7 +6,7 @@ namespace ComandaX.Infrastructure.Persistence.Repository;
 
 public class ProductRepository(AppDbContext _context) : IProductRepository
 {
-    public async Task<Product> AddProductAsync(Product product)
+    public async Task<Product> AddAsync(Product product)
     {
         var maxCode = await GetMaxCodeAsync();
 

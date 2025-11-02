@@ -9,6 +9,8 @@ public class ExceptionMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;
     private readonly IHostEnvironment _env;
+    private JsonSerializerOptions _options = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
 
     public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
     {
@@ -23,6 +25,18 @@ public class ExceptionMiddleware
         {
             await _next(context);
         }
+        catch (UserNotAuthorizedException ex)
+        {
+            _logger.LogWarning(ex, "User not authorized: {Message}", ex.Message);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+            var response = new ApiException(context.Response.StatusCode, ex.Message);
+
+            var json = JsonSerializer.Serialize(response, _options);
+            await context.Response.WriteAsync(json);
+        }
         catch (RecordNotFoundException ex)
         {
             _logger.LogWarning(ex, "Record not found: {Message}", ex.Message);
@@ -32,9 +46,7 @@ public class ExceptionMiddleware
 
             var response = new ApiException(context.Response.StatusCode, ex.Message);
 
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
-            var json = JsonSerializer.Serialize(response, options);
+            var json = JsonSerializer.Serialize(response, _options);
             await context.Response.WriteAsync(json);
         }
         catch (Exception ex)
@@ -48,9 +60,7 @@ public class ExceptionMiddleware
                 ? new ApiException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
                 : new ApiException(context.Response.StatusCode, "An unexpected error occurred.");
 
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
-            var json = JsonSerializer.Serialize(response, options);
+            var json = JsonSerializer.Serialize(response, _options);
             await context.Response.WriteAsync(json);
         }
     }

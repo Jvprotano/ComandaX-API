@@ -10,4 +10,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Table> Tables => Set<Table>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<OrderProduct> OrderProducts => Set<OrderProduct>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
 }

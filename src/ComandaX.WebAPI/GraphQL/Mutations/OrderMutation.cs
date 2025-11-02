@@ -1,7 +1,7 @@
-using ComandaX.Application.Orders.Commands.CreateOrder;
-using ComandaX.Application.Orders.Commands.AddProductsToOrder;
-using ComandaX.Application.Orders.Commands.CloseOrder;
 using MediatR;
+using ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
+using ComandaX.Application.Handlers.Orders.Commands.CloseOrder;
+using ComandaX.Application.Handlers.Orders.Commands.AddProductsToOrder;
 
 namespace ComandaX.WebAPI.GraphQL.Mutations;
 

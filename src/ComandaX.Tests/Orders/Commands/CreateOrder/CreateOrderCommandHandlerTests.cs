@@ -1,6 +1,6 @@
 using Moq;
 using ComandaX.Application.Interfaces;
-using ComandaX.Application.Orders.Commands.CreateOrder;
+using ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
 
 namespace ComandaX.Tests.Orders.Commands.CreateOrder;
 
