@@ -1,6 +1,7 @@
+using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Handlers.CustomerTabs.Queries.GetCustomerTabById;
 using ComandaX.Application.Handlers.CustomerTabs.Queries.GetCustomerTabs;
-using ComandaX.Domain.Entities;
 using MediatR;
 
 namespace ComandaX.WebAPI.GraphQL.Queries;
@@ -9,13 +10,16 @@ namespace ComandaX.WebAPI.GraphQL.Queries;
 public class CustomerTabQuery
 {
     [UseProjection]
-    public async Task<IQueryable<CustomerTab>> GetCustomerTabs([Service] IMediator mediator)
+    public async Task<IQueryable<CustomerTabDto>> GetCustomerTabs([Service] IMediator mediator)
     {
-        return await mediator.Send(new GetCustomerTabsQuery());
+        var customerTabs = await mediator.Send(new GetCustomerTabsQuery());
+
+        return customerTabs.Select(tab => tab.AsDto());
     }
 
-    public async Task<CustomerTab> GetCustomerTabById(Guid id, [Service] IMediator mediator)
+    public async Task<CustomerTabDto> GetCustomerTabById(Guid id, [Service] IMediator mediator)
     {
-        return await mediator.Send(new GetCustomerTabByIdQuery(id));
+        var customerTab = await mediator.Send(new GetCustomerTabByIdQuery(id));
+        return customerTab.AsDto();
     }
 }

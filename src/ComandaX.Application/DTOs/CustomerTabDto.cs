@@ -2,6 +2,6 @@ namespace ComandaX.Application.DTOs;
 
 public sealed record CustomerTabDto(
     Guid Id,
-    string Name,
+    string? Name,
     Guid? TableId,
-    TableDto? Table);
+    TableDto? Table = null);

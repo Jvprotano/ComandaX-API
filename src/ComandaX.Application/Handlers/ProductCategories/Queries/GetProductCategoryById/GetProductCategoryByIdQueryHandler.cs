@@ -1,6 +1,6 @@
-
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Exceptions;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using MediatR;
 
@@ -13,6 +13,6 @@ public class GetProductCategoryByIdQueryHandler(IProductCategoryRepository _prod
         var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id)
         ?? throw new RecordNotFoundException($"ProductCategory with Id {request.Id} not found.");
 
-        return new(productCategory.Id, productCategory.Name);
+        return productCategory.AsDto();
     }
 }

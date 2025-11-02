@@ -1,5 +1,6 @@
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Exceptions;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using MediatR;
 
@@ -12,6 +13,6 @@ public class GetProductByIdHandler(IProductRepository _productRepository) : IReq
         var product = await _productRepository.GetByIdAsync(request.Id)
         ?? throw new RecordNotFoundException($"Product with Id {request.Id} not found.");
 
-        return new(product.Id, product.Name, product.Price, product.Code);
+        return product.AsDto();
     }
 }

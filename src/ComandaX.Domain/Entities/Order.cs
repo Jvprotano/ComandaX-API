@@ -2,7 +2,7 @@ using ComandaX.Domain.Enums;
 
 namespace ComandaX.Domain.Entities;
 
-public sealed class Order  : BaseEntity
+public sealed class Order : BaseEntity
 {
     public Order(Guid tabId)
     {
@@ -10,6 +10,7 @@ public sealed class Order  : BaseEntity
         Status = OrderStatusEnum.Created;
     }
 
+    public int Code { get; private set; }
     public OrderStatusEnum Status { get; private set; }
     public IList<OrderProduct> OrderProducts { get; set; } = [];
     public Guid TabId { get; set; }
@@ -23,5 +24,10 @@ public sealed class Order  : BaseEntity
     public void CloseOrder()
     {
         Status = OrderStatusEnum.Closed;
+    }
+
+    public void SetCode(int code)
+    {
+        Code = code;
     }
 }

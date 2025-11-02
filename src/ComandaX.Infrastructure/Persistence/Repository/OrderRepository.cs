@@ -18,15 +18,26 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
         return Task.FromResult(_context.Orders.AsQueryable());
     }
 
-    public Task<Order> CreateAsync(Order order)
+    public async Task<Order> AddAsync(Order order)
     {
-        _context.Orders.Add(order);
-        return _context.SaveChangesAsync().ContinueWith(_ => order);
+        var maxCode = await GetMaxCodeAsync();
+        order.SetCode(maxCode + 1);
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        return order;
     }
 
     public Task UpdateAsync(Order order)
     {
         _context.Orders.Update(order);
         return _context.SaveChangesAsync();
+    }
+
+    private async Task<int> GetMaxCodeAsync()
+    {
+        var maxCode = await _context.Orders.AnyAsync() ? _context.Orders.Max(p => p.Code) : 0;
+        return maxCode;
     }
 }

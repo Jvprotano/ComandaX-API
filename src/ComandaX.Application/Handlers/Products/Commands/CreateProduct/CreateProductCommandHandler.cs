@@ -1,4 +1,5 @@
 using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -23,7 +24,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
         var product = await _repository.AddAsync(productRequest);
 
-        return new ProductDto(product.Id, product.Name, product.Price, product.Code);
+        return product.AsDto();
     }
 }
 

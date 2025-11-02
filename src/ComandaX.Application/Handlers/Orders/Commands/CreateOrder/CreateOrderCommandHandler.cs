@@ -30,7 +30,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
         table.SetBusy();
         await _tableRepository.UpdateAsync(table);
 
-        await _orderRepository.CreateAsync(order);
+        await _orderRepository.AddAsync(order);
 
         return order.Id;
     }

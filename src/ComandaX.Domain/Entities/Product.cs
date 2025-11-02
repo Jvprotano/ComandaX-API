@@ -8,7 +8,6 @@ public sealed class Product : BaseEntity
         Price = price;
         ProductCategoryId = productCategoryId;
     }
-
     public string Name { get; private set; }
     public decimal Price { get; private set; }
     public int Code { get; private set; }

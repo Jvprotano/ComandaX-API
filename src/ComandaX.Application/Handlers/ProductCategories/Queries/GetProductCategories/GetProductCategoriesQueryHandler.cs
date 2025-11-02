@@ -1,5 +1,5 @@
-
 using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using MediatR;
 
@@ -10,6 +10,6 @@ public class GetProductCategoriesQueryHandler(IProductCategoryRepository _produc
     public async Task<IList<ProductCategoryDto>> Handle(GetProductCategoriesQuery request, CancellationToken cancellationToken)
     {
         var productCategories = await _productCategoryRepository.GetAllAsync();
-        return productCategories.Select(pc => new ProductCategoryDto(pc.Id, pc.Name)).ToList();
+        return [.. productCategories.Select(pc => pc.AsDto())];
     }
 }

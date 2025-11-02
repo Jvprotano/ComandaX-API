@@ -1,4 +1,5 @@
 using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -20,6 +21,6 @@ public class CreateProductCategoryCommandHandler : IRequestHandler<CreateProduct
 
         var productCategory = await _repository.AddAsync(productCategoryRequest);
 
-        return new ProductCategoryDto(productCategory.Id, productCategory.Name);
+        return productCategory.AsDto();
     }
 }

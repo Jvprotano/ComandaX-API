@@ -1,10 +1,10 @@
-using ComandaX.Domain.Entities;
+using ComandaX.Application.DTOs;
 
 namespace ComandaX.WebAPI.GraphQL.Types;
 
-public class ProductType : ObjectType<Product>
+public class ProductType : ObjectType<ProductDto>
 {
-    protected override void Configure(IObjectTypeDescriptor<Product> descriptor)
+    protected override void Configure(IObjectTypeDescriptor<ProductDto> descriptor)
     {
         descriptor.Field(p => p.Id).Type<NonNullType<IdType>>();
         descriptor.Field(p => p.Name).Type<StringType>();
