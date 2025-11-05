@@ -33,4 +33,10 @@ public class ProductCategoryRepository(AppDbContext _context) : IProductCategory
         _context.ProductCategories.Update(productCategory);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(ProductCategory productCategory)
+    {
+        _context.ProductCategories.Remove(productCategory);
+        await _context.SaveChangesAsync();
+    }
 }

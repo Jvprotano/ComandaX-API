@@ -10,7 +10,8 @@ public static class OrderExtension
         return new OrderDto(
             order.Id,
             order.Code,
-            new(),
+            order.CustomerTabId,
+            [.. order.OrderProducts.Select(p => new OrderProductDto(p.ProductId, p.Quantity, p.TotalPrice))],
             order.Status
         );
     }

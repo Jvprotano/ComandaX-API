@@ -4,13 +4,18 @@ namespace ComandaX.Domain.Entities;
 
 public class OrderProduct : BaseEntity
 {
-    public OrderProduct(Guid orderId, Guid productId, int quantity)
+    public OrderProduct()
+    {
+
+    }
+
+    public OrderProduct(Guid orderId, Guid productId, int quantity, decimal productPrice)
     {
         OrderId = orderId;
         ProductId = productId;
         Quantity = quantity;
 
-        TotalPrice = quantity * (Product?.Price ?? 0);
+        TotalPrice = quantity * productPrice;
     }
     public Guid OrderId { get; private set; }
     public Order? Order { get; set; }
@@ -18,5 +23,5 @@ public class OrderProduct : BaseEntity
     public Product? Product { get; set; }
     public decimal TotalPrice { get; private set; }
     public int Quantity { get; private set; }
-    public OrderProductsEnum? Status { get; private set; }
+    public OrderProductEnum? Status { get; private set; }
 }

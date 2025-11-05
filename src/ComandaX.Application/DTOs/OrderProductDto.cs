@@ -1,8 +1,7 @@
 namespace ComandaX.Application.DTOs;
 
 public sealed record OrderProductDto(
-    string ProductName,
-    string UnitPrice,
+    Guid ProductId,
     int Quantity,
-    string TotalPrice
+    decimal TotalPrice
 );

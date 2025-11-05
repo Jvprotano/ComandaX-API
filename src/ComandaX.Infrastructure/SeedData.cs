@@ -64,7 +64,7 @@ public class SeedData
         await context.SaveChangesAsync();
 
         var orderProducts = new Faker<OrderProduct>()
-            .CustomInstantiator(f => new OrderProduct(f.Random.ListItem(orders).Id, f.Random.ListItem(products).Id, f.Random.Int(1, 5)))
+            .CustomInstantiator(f => new OrderProduct(f.Random.ListItem(orders).Id, f.Random.ListItem(products).Id, f.Random.Int(1, 5), f.Random.Decimal(1, 100)))
             .Generate(200);
         await context.OrderProducts.AddRangeAsync(orderProducts);
         await context.SaveChangesAsync();

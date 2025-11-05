@@ -9,18 +9,25 @@ namespace ComandaX.WebAPI.GraphQL.Mutations;
 [ExtendObjectType("Mutation")]
 public class OrderMutation
 {
-    public async Task<OrderDto> CreateOrder(CreateOrderCommand command, [Service] IMediator mediator)
+    public async Task<OrderDto> CreateOrderAsync(
+        Guid? customerTabId,
+        IList<CreateOrderProductInput> products,
+        [Service] IMediator mediator)
     {
+        var command = new CreateOrderCommand(
+            customerTabId,
+            [.. products.Select(p => new CreateOrderProductDto(p.ProductId, p.Quantity))]);
+
         return await mediator.Send(command);
     }
 
-    public async Task<bool> AddProductsToOrder(AddProductsToOrderCommand command, [Service] IMediator mediator)
+    public async Task<bool> AddProductsToOrderAsync(AddProductsToOrderCommand command, [Service] IMediator mediator)
     {
         await mediator.Send(command);
         return true;
     }
 
-    public async Task<bool> CloseOrder(CloseOrderCommand command, [Service] IMediator mediator)
+    public async Task<bool> CloseOrderAsync(CloseOrderCommand command, [Service] IMediator mediator)
     {
         await mediator.Send(command);
         return true;

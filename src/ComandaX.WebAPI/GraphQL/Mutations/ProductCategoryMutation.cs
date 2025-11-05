@@ -1,5 +1,6 @@
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Handlers.ProductCategories.Commands.CreateProductCategory;
+using ComandaX.Application.Handlers.ProductCategories.Commands.DeleteProductCategory;
 using ComandaX.Application.Handlers.ProductCategories.Commands.UpdateProductCategory;
 using MediatR;
 
@@ -22,6 +23,14 @@ public class ProductCategoryMutation
         Optional<string?> icon)
     {
         await mediator.Send(new UpdateProductCategoryCommand(id, name, icon));
+        return true;
+    }
+
+    public async Task<bool> DeleteProductCategoryAsync(
+        [Service] ISender mediator,
+        Guid id)
+    {
+        await mediator.Send(new DeleteProductCategoryCommand(id));
         return true;
     }
 }

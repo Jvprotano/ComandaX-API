@@ -9,4 +9,5 @@ public interface IProductCategoryRepository
     Task<ProductCategory> AddAsync(ProductCategory productCategory);
     Task<IReadOnlyList<ProductCategory>> GetByIdsAsync(IReadOnlyList<Guid> keys);
     Task UpdateAsync(ProductCategory productCategory);
+    Task DeleteAsync(ProductCategory productCategory);
 }

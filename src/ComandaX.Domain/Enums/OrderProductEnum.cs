@@ -1,6 +1,6 @@
 namespace ComandaX.Domain.Enums;
 
-public enum OrderProductsEnum
+public enum OrderProductEnum
 {
     Waiting,
     Preparing,

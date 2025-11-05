@@ -7,9 +7,10 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
 
-public class CreateOrderCommandHandler(IOrderRepository orderRepository) : IRequestHandler<CreateOrderCommand, OrderDto>
+public class CreateOrderCommandHandler(
+    IOrderRepository orderRepository,
+    IProductRepository productRepository) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
-    private readonly IOrderRepository _orderRepository = orderRepository;
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
@@ -18,7 +19,18 @@ public class CreateOrderCommandHandler(IOrderRepository orderRepository) : IRequ
         if (request.CustomerTabId.HasValue)
             order.SetCustomerTab(request.CustomerTabId.Value);
 
-        await _orderRepository.AddAsync(order);
+        if (request.Products is null || !request.Products.Any())
+            throw new OrderWithoutProductsException();
+
+        foreach (var item in request.Products)
+        {
+            var product = await productRepository.GetByIdAsync(item.ProductId)
+                ?? throw new RecordNotFoundException($"Product {item.ProductId} not found");
+
+            order.AddProduct(item.ProductId, item.Quantity, product.Price);
+        }
+
+        await orderRepository.AddAsync(order);
 
         return order.AsDto();
     }
