@@ -4,30 +4,38 @@ namespace ComandaX.Domain.Entities;
 
 public sealed class Order : BaseEntity
 {
-    public Order(Guid tabId)
+    public Order()
     {
-        TabId = tabId;
-        Status = OrderStatusEnum.Created;
+
+    }
+
+    public Order(Guid customerTabId)
+    {
+        CustomerTabId = customerTabId;
     }
 
     public int Code { get; private set; }
-    public OrderStatusEnum Status { get; private set; }
-    public IList<OrderProduct> OrderProducts { get; set; } = [];
-    public Guid TabId { get; set; }
+    public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.Created;
+    public Guid? CustomerTabId { get; private set; }
     public CustomerTab? CustomerTab { get; set; }
+    public IList<OrderProduct> OrderProducts { get; set; } = [];
 
     public void StartPreparation()
     {
         Status = OrderStatusEnum.InPreparation;
+        EntityUpdated();
+    }
+
+    public void SetCustomerTab(Guid customerTabId)
+    {
+        CustomerTabId = customerTabId;
+        EntityUpdated();
+
     }
 
     public void CloseOrder()
     {
         Status = OrderStatusEnum.Closed;
-    }
-
-    public void SetCode(int code)
-    {
-        Code = code;
+        EntityUpdated();
     }
 }

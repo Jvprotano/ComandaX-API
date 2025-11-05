@@ -20,7 +20,7 @@ public class AuthenticateWithGoogleHandler(IUserRepository _userRepository, ICon
         var email = payload.Email;
 
         var user = await _userRepository.GetByEmailAsync(email)
-         ?? throw new UserNotAuthorizedException(email); ;
+         ?? throw new UserNotAuthorizedException(email);
 
         var jwtToken = GenerateJwt(user);
 

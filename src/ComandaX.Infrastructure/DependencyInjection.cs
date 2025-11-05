@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ComandaX.Application.Interfaces;
 using ComandaX.Infrastructure.Persistence.Repository;
-using ComandaX.Infrastructure.Repository;
 
 namespace ComandaX.Infrastructure;
 

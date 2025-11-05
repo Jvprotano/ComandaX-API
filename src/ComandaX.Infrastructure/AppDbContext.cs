@@ -12,4 +12,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<OrderProduct> OrderProducts => Set<OrderProduct>();
     public DbSet<User> Users => Set<User>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+            .Property(p => p.Code)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Order>()
+            .Property(p => p.Code)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Table>()
+            .Property(p => p.Code)
+            .ValueGeneratedOnAdd();
+
+        base.OnModelCreating(modelBuilder);
+    }
 }

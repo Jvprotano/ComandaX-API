@@ -20,9 +20,6 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
 
     public async Task<Order> AddAsync(Order order)
     {
-        var maxCode = await GetMaxCodeAsync();
-        order.SetCode(maxCode + 1);
-
         await _context.Orders.AddAsync(order);
         await _context.SaveChangesAsync();
 
@@ -33,11 +30,5 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
     {
         _context.Orders.Update(order);
         return _context.SaveChangesAsync();
-    }
-
-    private async Task<int> GetMaxCodeAsync()
-    {
-        var maxCode = await _context.Orders.AnyAsync() ? _context.Orders.Max(p => p.Code) : 0;
-        return maxCode;
     }
 }

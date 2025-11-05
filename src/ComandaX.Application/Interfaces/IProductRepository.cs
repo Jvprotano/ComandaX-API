@@ -7,4 +7,5 @@ public interface IProductRepository
     Task<IList<Product>> GetAllAsync();
     Task<Product?> GetByIdAsync(Guid id);
     Task<Product> AddAsync(Product product);
+    Task UpdateAsync(Product product);
 }

@@ -1,4 +1,5 @@
 using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -16,12 +17,8 @@ public class CreateTableCommandHandler : IRequestHandler<CreateTableCommand, Tab
 
     public async Task<TableDto> Handle(CreateTableCommand request, CancellationToken cancellationToken)
     {
-        var maxNumber = await _repository.GetMaxCodeAsync();
+        var newTable = await _repository.AddAsync(new());
 
-        var table = new Table(maxNumber + 1);
-
-        var newTable = await _repository.AddAsync(table);
-
-        return new TableDto(newTable.Id, newTable.Code, newTable.Status);
+        return newTable.AsDto();
     }
 }

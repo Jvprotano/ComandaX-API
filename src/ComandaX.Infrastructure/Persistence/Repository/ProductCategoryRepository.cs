@@ -27,4 +27,10 @@ public class ProductCategoryRepository(AppDbContext _context) : IProductCategory
     {
         return await _context.ProductCategories.Where(pc => keys.Contains(pc.Id)).ToListAsync();
     }
+
+    public async Task UpdateAsync(ProductCategory productCategory)
+    {
+        _context.ProductCategories.Update(productCategory);
+        await _context.SaveChangesAsync();
+    }
 }

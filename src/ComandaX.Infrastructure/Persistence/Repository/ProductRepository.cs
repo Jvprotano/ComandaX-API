@@ -8,11 +8,6 @@ public class ProductRepository(AppDbContext _context) : IProductRepository
 {
     public async Task<Product> AddAsync(Product product)
     {
-        var maxCode = await GetMaxCodeAsync();
-
-        if (product.Code != maxCode + 1)
-            product.SetCode(maxCode + 1);
-
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
 
@@ -29,9 +24,9 @@ public class ProductRepository(AppDbContext _context) : IProductRepository
         return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    private async Task<int> GetMaxCodeAsync()
+    public async Task UpdateAsync(Product product)
     {
-        var maxCode = await _context.Products.AnyAsync() ? _context.Products.Max(p => p.Code) : 0;
-        return maxCode;
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
     }
 }

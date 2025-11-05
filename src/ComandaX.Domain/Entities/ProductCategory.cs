@@ -9,6 +9,17 @@ public class ProductCategory : BaseEntity
     }
 
     public string Name { get; private set; }
+
+    public void UpdateName(string name)
+    {
+        Name = name;
+    }
+
+    public void UpdateIcon(string? icon)
+    {
+        Icon = icon;
+    }
+
     public string? Icon { get; private set; }
 
     public IList<Product>? Products { get; set; }

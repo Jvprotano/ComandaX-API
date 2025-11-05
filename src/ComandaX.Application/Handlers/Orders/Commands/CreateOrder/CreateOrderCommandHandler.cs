@@ -1,37 +1,25 @@
+using ComandaX.Application.DTOs;
 using ComandaX.Application.Exceptions;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
 
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
+public class CreateOrderCommandHandler(IOrderRepository orderRepository) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly IProductRepository _productRepository;
-    private readonly ITableRepository _tableRepository;
+    private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public CreateOrderCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository, ITableRepository tableRepository)
+    public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        _orderRepository = orderRepository;
-        _productRepository = productRepository;
-        _tableRepository = tableRepository;
-    }
+        var order = new Order();
 
-    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
-    {
-        var table = await _tableRepository.GetByIdAsync(request.TabId)
-            ?? throw new RecordNotFoundException($"Table {request.TabId} not found");
-
-        var order = new Order(request.TabId);
-
-        // TODO: Check if all products exist
-
-        table.SetBusy();
-        await _tableRepository.UpdateAsync(table);
+        if (request.CustomerTabId.HasValue)
+            order.SetCustomerTab(request.CustomerTabId.Value);
 
         await _orderRepository.AddAsync(order);
 
-        return order.Id;
+        return order.AsDto();
     }
 }

@@ -46,7 +46,7 @@ public class SeedData
         await context.SaveChangesAsync();
 
         var tables = new Faker<Table>()
-            .CustomInstantiator(f => new Table(f.Random.Int(1, 100)))
+            .CustomInstantiator(f => new Table())
             .Generate(20);
         await context.Tables.AddRangeAsync(tables);
         await context.SaveChangesAsync();

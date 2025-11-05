@@ -16,6 +16,6 @@ public class CreateOrderCommandHandlerTests
         _orderRepositoryMock = new Mock<IOrderRepository>();
         _productRepositoryMock = new Mock<IProductRepository>();
         _tableRepositoryMock = new Mock<ITableRepository>();
-        _handler = new CreateOrderCommandHandler(_orderRepositoryMock.Object, _productRepositoryMock.Object, _tableRepositoryMock.Object);
+        _handler = new CreateOrderCommandHandler(_orderRepositoryMock.Object);
     }
 }

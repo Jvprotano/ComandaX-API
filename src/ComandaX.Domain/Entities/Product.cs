@@ -18,10 +18,24 @@ public sealed class Product : BaseEntity
     public void SetNeedPreparation(bool needPreparation)
     {
         NeedPreparation = needPreparation;
+        EntityUpdated();
     }
 
-    public void SetCode(int code)
+    public void SetName(string name)
     {
-        Code = code;
+        Name = name.Trim();
+        EntityUpdated();
+    }
+
+    public void SetPrice(decimal price)
+    {
+        Price = price;
+        EntityUpdated();
+    }
+
+    public void SetProductCategory(Guid? productCategoryId)
+    {
+        ProductCategoryId = productCategoryId;
+        EntityUpdated();
     }
 }
