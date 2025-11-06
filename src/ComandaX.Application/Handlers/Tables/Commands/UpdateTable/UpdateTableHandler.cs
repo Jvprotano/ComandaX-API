@@ -13,8 +13,7 @@ public class UpdateTableHandler(ITableRepository tableRepository) : IRequestHand
         var table = await tableRepository.GetByIdAsync(request.Id)
             ?? throw new RecordNotFoundException($"Table with Id {request.Id} not found");
 
-        if (request.Number != null)
-            table.SetNumber(request.Number.Value);
+        table.SetNumber(request.Number);
 
         await tableRepository.UpdateAsync(table);
 

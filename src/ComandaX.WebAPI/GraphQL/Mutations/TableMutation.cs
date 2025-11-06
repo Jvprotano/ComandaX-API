@@ -17,7 +17,7 @@ public class TableMutation
     public async Task<TableDto> UpdateTableAsync(
         [Service] ISender mediator,
         Guid id,
-        int? number)
+        int number)
     {
         return await mediator.Send(new UpdateTableCommand(id, number));
     }
