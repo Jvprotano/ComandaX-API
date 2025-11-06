@@ -8,4 +8,5 @@ public interface IProductRepository
     Task<Product?> GetByIdAsync(Guid id);
     Task<Product> AddAsync(Product product);
     Task UpdateAsync(Product product);
+    Task<IList<Product>> GetByIdsAsync(IReadOnlyList<Guid> ids);
 }

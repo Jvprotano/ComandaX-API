@@ -33,8 +33,10 @@ public static class ServiceCollectionExtensions
             .AddType<ProductCategoryMutation>()
             .AddDataLoader<GetTableByIdDataLoader>()
             .AddDataLoader<GetProductCategoryByIdDataLoader>()
+            .AddDataLoader<GetProductByIdDataLoader>()
             .AddResolver<CustomerTabResolvers>()
             .AddResolver<ProductResolvers>()
+            .AddResolver<OrderProductResolvers>()
             .AddProjections()
             .AddFiltering()
             .AddSorting();
