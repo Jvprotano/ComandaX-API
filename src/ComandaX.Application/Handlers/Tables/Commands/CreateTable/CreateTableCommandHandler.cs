@@ -6,19 +6,17 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Commands.CreateTable;
 
-public class CreateTableCommandHandler : IRequestHandler<CreateTableCommand, TableDto>
+public class CreateTableCommandHandler(ITableRepository repository) : IRequestHandler<CreateTableCommand, TableDto>
 {
-    private readonly ITableRepository _repository;
-
-    public CreateTableCommandHandler(ITableRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<TableDto> Handle(CreateTableCommand request, CancellationToken cancellationToken)
     {
-        var newTable = await _repository.AddAsync(new());
+        var table = new Table();
 
-        return newTable.AsDto();
+        if (request.Number != null)
+            table.SetNumber(request.Number.Value);
+
+        await repository.AddAsync(table);
+
+        return table.AsDto();
     }
 }

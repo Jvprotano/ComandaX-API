@@ -20,7 +20,10 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         var productRequest = new Product(request.Name, request.Price);
 
         if (request.NeedPreparation)
-            productRequest.SetNeedPreparation(true);
+            productRequest.SetNeedPreparation(request.NeedPreparation);
+
+        if (request.ProductCategoryId.HasValue)
+            productRequest.SetProductCategory(request.ProductCategoryId.Value);
 
         var product = await _repository.AddAsync(productRequest);
 

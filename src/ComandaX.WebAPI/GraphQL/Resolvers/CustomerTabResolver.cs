@@ -18,6 +18,6 @@ public class CustomerTabResolvers
         if (table == null)
             return null;
 
-        return new(table.Id, table.Code, table.Status);
+        return new(table.Id, table.Number, table.Status);
     }
 }

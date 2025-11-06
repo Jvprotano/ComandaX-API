@@ -7,6 +7,6 @@ public class TableType : ObjectType<TableDto>
     protected override void Configure(IObjectTypeDescriptor<TableDto> descriptor)
     {
         descriptor.Field(t => t.Id).Type<NonNullType<IdType>>();
-        descriptor.Field(t => t.Code).Type<IntType>();
+        descriptor.Field(t => t.Number).Type<IntType>();
     }
 }

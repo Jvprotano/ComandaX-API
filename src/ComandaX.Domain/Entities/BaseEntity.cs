@@ -8,4 +8,6 @@ public abstract class BaseEntity
     public DateTime? DeletedAt { get; private set; }
 
     protected void EntityUpdated() => UpdatedAt = DateTime.UtcNow;
+
+    public void SoftDelete() => DeletedAt = DateTime.UtcNow;
 }

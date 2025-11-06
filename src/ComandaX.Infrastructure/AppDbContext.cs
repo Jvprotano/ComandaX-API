@@ -15,17 +15,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Product>()
-            .Property(p => p.Code)
-            .ValueGeneratedOnAdd();
-
         modelBuilder.Entity<Order>()
             .Property(p => p.Code)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<Table>()
-            .Property(p => p.Code)
-            .ValueGeneratedOnAdd();
+        modelBuilder.Entity<Product>().HasQueryFilter(p => p.DeletedAt == null);
+        modelBuilder.Entity<Table>().HasQueryFilter(t => t.DeletedAt == null);
+        modelBuilder.Entity<ProductCategory>().HasQueryFilter(pc => pc.DeletedAt == null);
 
         base.OnModelCreating(modelBuilder);
     }

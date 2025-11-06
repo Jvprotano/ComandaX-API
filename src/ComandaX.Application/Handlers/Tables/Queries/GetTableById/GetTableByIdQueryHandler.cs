@@ -1,5 +1,6 @@
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Exceptions;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using MediatR;
 
@@ -18,6 +19,6 @@ public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, Table
     {
         var table = await _repository.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException($"Table with id {request.Id} not found");
 
-        return new TableDto(table.Id, table.Code, table.Status);
+        return table.AsDto();
     }
 }

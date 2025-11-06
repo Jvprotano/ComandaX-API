@@ -7,6 +7,6 @@ public static class TableExtension
 {
     public static TableDto AsDto(this Table table)
     {
-        return new TableDto(table.Id, table.Code, table.Status);
+        return new TableDto(table.Id, table.Number, table.Status);
     }
 }
