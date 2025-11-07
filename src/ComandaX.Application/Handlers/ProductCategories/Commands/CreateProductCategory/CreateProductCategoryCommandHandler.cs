@@ -6,14 +6,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.ProductCategories.Commands.CreateProductCategory;
 
-public class CreateProductCategoryCommandHandler : IRequestHandler<CreateProductCategoryCommand, ProductCategoryDto>
+public class CreateProductCategoryCommandHandler(IProductCategoryRepository repository) : IRequestHandler<CreateProductCategoryCommand, ProductCategoryDto>
 {
-    private readonly IProductCategoryRepository _repository;
-
-    public CreateProductCategoryCommandHandler(IProductCategoryRepository repository)
-    {
-        _repository = repository;
-    }
+    private readonly IProductCategoryRepository _repository = repository;
 
     public async Task<ProductCategoryDto> Handle(CreateProductCategoryCommand request, CancellationToken cancellationToken)
     {

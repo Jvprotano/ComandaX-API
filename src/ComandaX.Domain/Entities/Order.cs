@@ -22,8 +22,16 @@ public sealed class Order : BaseEntity
 
     public void AddProduct(Guid productId, int quantity, decimal price)
     {
-        var orderProduct = new OrderProduct(Id, productId, quantity, price);
-        OrderProducts.Add(orderProduct);
+        if (quantity <= 0)
+            throw new ArgumentException("Quantity must be greater than zero", nameof(quantity));
+
+        if (price <= 0)
+            throw new ArgumentException("Price must be greater than zero", nameof(price));
+
+        if (productId == Guid.Empty)
+            throw new ArgumentException("Product ID cannot be empty", nameof(productId));
+
+        OrderProducts.Add(new(Id, productId, quantity, price));
         EntityUpdated();
     }
 
@@ -35,9 +43,11 @@ public sealed class Order : BaseEntity
 
     public void SetCustomerTab(Guid customerTabId)
     {
+        if (customerTabId == Guid.Empty)
+            throw new ArgumentException("Customer tab ID cannot be empty", nameof(customerTabId));
+
         CustomerTabId = customerTabId;
         EntityUpdated();
-
     }
 
     public void CloseOrder()

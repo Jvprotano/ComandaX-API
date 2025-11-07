@@ -1,23 +1,16 @@
 using System.Net;
 using System.Text.Json;
 using ComandaX.Application.Exceptions;
+using FluentValidation;
 
 namespace ComandaX.WebAPI.Middleware;
 
-public class ExceptionMiddleware
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
-    private readonly IHostEnvironment _env;
+    private readonly RequestDelegate _next = next;
+    private readonly ILogger<ExceptionMiddleware> _logger = logger;
+    private readonly IHostEnvironment _env = env;
     private JsonSerializerOptions _options = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-
-
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
-    {
-        _next = next;
-        _logger = logger;
-        _env = env;
-    }
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -49,6 +42,19 @@ public class ExceptionMiddleware
             var json = JsonSerializer.Serialize(response, _options);
             await context.Response.WriteAsync(json);
         }
+        catch (ValidationException ex)
+        {
+            _logger.LogWarning(ex, "Validation failed: {Errors}", string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            var errors = ex.Errors.Select(e => new ValidationError(e.PropertyName, e.ErrorMessage)).ToList();
+            var response = new ValidationApiException(context.Response.StatusCode, "Validation failed", errors);
+
+            var json = JsonSerializer.Serialize(response, _options);
+            await context.Response.WriteAsync(json);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unhandled exception occurred: {Message}", ex.Message);
@@ -66,16 +72,16 @@ public class ExceptionMiddleware
     }
 }
 
-public class ApiException
+public class ApiException(int statusCode, string message, string? details = null)
 {
-    public int StatusCode { get; }
-    public string Message { get; }
-    public string? Details { get; }
-
-    public ApiException(int statusCode, string message, string? details = null)
-    {
-        StatusCode = statusCode;
-        Message = message;
-        Details = details;
-    }
+    public int StatusCode { get; } = statusCode;
+    public string Message { get; } = message;
+    public string? Details { get; } = details;
 }
+
+public class ValidationApiException(int statusCode, string message, List<ValidationError> errors) : ApiException(statusCode, message)
+{
+    public List<ValidationError> Errors { get; } = errors;
+}
+
+public record ValidationError(string PropertyName, string ErrorMessage);

@@ -4,14 +4,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Commands.DeleteTable;
 
-public class DeleteTableCommandHandler : IRequestHandler<DeleteTableCommand>
+public class DeleteTableCommandHandler(ITableRepository tableRepository) : IRequestHandler<DeleteTableCommand>
 {
-    private readonly ITableRepository _tableRepository;
-
-    public DeleteTableCommandHandler(ITableRepository tableRepository)
-    {
-        _tableRepository = tableRepository;
-    }
+    private readonly ITableRepository _tableRepository = tableRepository;
 
     public async Task Handle(DeleteTableCommand request, CancellationToken cancellationToken)
     {

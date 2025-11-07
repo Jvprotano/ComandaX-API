@@ -6,14 +6,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Queries.GetTableById;
 
-public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, TableDto>
+public class GetTableByIdQueryHandler(ITableRepository repository) : IRequestHandler<GetTableByIdQuery, TableDto>
 {
-    private readonly ITableRepository _repository;
-
-    public GetTableByIdQueryHandler(ITableRepository repository)
-    {
-        _repository = repository;
-    }
+    private readonly ITableRepository _repository = repository;
 
     public async Task<TableDto> Handle(GetTableByIdQuery request, CancellationToken cancellationToken)
     {

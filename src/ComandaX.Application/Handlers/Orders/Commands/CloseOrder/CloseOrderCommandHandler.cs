@@ -4,16 +4,10 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Commands.CloseOrder;
 
-public class CloseOrderCommandHandler : IRequestHandler<CloseOrderCommand, Unit>
+public class CloseOrderCommandHandler(IOrderRepository orderRepository, ITableRepository tableRepository) : IRequestHandler<CloseOrderCommand, Unit>
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly ITableRepository _tableRepository;
-
-    public CloseOrderCommandHandler(IOrderRepository orderRepository, ITableRepository tableRepository)
-    {
-        _orderRepository = orderRepository;
-        _tableRepository = tableRepository;
-    }
+    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly ITableRepository _tableRepository = tableRepository;
 
     public async Task<Unit> Handle(CloseOrderCommand request, CancellationToken cancellationToken)
     {

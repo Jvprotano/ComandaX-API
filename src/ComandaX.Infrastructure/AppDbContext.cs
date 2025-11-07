@@ -22,6 +22,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Product>().HasQueryFilter(p => p.DeletedAt == null);
         modelBuilder.Entity<Table>().HasQueryFilter(t => t.DeletedAt == null);
         modelBuilder.Entity<ProductCategory>().HasQueryFilter(pc => pc.DeletedAt == null);
+        modelBuilder.Entity<Order>().HasQueryFilter(o => o.DeletedAt == null);
+        modelBuilder.Entity<CustomerTab>().HasQueryFilter(ct => ct.DeletedAt == null);
+        modelBuilder.Entity<OrderProduct>().HasQueryFilter(op => op.DeletedAt == null);
+        modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -4,14 +4,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Queries.GetOrders;
 
-public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IQueryable<Order>>
+public class GetOrdersQueryHandler(IOrderRepository orderRepository) : IRequestHandler<GetOrdersQuery, IQueryable<Order>>
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public GetOrdersQueryHandler(IOrderRepository orderRepository)
-    {
-        _orderRepository = orderRepository;
-    }
+    private readonly IOrderRepository _orderRepository = orderRepository;
 
     public async Task<IQueryable<Order>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {

@@ -3,13 +3,9 @@ using ComandaX.Domain.Entities;
 
 namespace ComandaX.WebAPI.GraphQL.DataLoaders;
 
-public class GetTableByIdDataLoader : BatchDataLoader<Guid, Table>
+public class GetTableByIdDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, ITableRepository tableRepository) : BatchDataLoader<Guid, Table>(batchScheduler, options)
 {
-    private readonly ITableRepository _tableRepository;
-    public GetTableByIdDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, ITableRepository tableRepository) : base(batchScheduler, options)
-    {
-        _tableRepository = tableRepository;
-    }
+    private readonly ITableRepository _tableRepository = tableRepository;
 
     protected override async Task<IReadOnlyDictionary<Guid, Table>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
     {

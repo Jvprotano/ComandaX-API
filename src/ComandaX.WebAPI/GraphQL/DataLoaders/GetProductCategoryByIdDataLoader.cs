@@ -3,13 +3,9 @@ using ComandaX.Domain.Entities;
 
 namespace ComandaX.WebAPI.GraphQL.DataLoaders;
 
-public class GetProductCategoryByIdDataLoader : BatchDataLoader<Guid, ProductCategory>
+public class GetProductCategoryByIdDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IProductCategoryRepository productCategoryRepository) : BatchDataLoader<Guid, ProductCategory>(batchScheduler, options)
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-    public GetProductCategoryByIdDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IProductCategoryRepository productCategoryRepository) : base(batchScheduler, options)
-    {
-        _productCategoryRepository = productCategoryRepository;
-    }
+    private readonly IProductCategoryRepository _productCategoryRepository = productCategoryRepository;
 
     protected override async Task<IReadOnlyDictionary<Guid, ProductCategory>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
     {

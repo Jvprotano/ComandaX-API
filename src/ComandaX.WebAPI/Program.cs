@@ -3,14 +3,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Application;
+using ComandaX.Application.Behaviors;
 using ComandaX.Infrastructure;
 using ComandaX.WebAPI.Extensions;
+using FluentValidation;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure();
 
 builder.Services.AddGraphQLServices();
+
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -20,12 +25,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());
 
+// Add FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
-        policy.AllowAnyOrigin()
+    options.AddPolicy("RestrictedPolicy", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod());
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
 });
 
 builder.Services.AddAuthorization();

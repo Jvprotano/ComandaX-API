@@ -4,16 +4,10 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
 
-public class CreateCustomerTabCommandHandler : IRequestHandler<CreateCustomerTabCommand, CustomerTab>
+public class CreateCustomerTabCommandHandler(ICustomerTabRepository customerTabRepository, ITableRepository tableRepository) : IRequestHandler<CreateCustomerTabCommand, CustomerTab>
 {
-    private readonly ICustomerTabRepository _customerTabRepository;
-    private readonly ITableRepository _tableRepository;
-
-    public CreateCustomerTabCommandHandler(ICustomerTabRepository customerTabRepository, ITableRepository tableRepository)
-    {
-        _customerTabRepository = customerTabRepository;
-        _tableRepository = tableRepository;
-    }
+    private readonly ICustomerTabRepository _customerTabRepository = customerTabRepository;
+    private readonly ITableRepository _tableRepository = tableRepository;
 
     public async Task<CustomerTab> Handle(CreateCustomerTabCommand request, CancellationToken cancellationToken)
     {

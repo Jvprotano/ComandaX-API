@@ -4,16 +4,10 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Commands.AddProductsToOrder;
 
-public class AddProductsToOrderCommandHandler : IRequestHandler<AddProductsToOrderCommand, Unit>
+public class AddProductsToOrderCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository) : IRequestHandler<AddProductsToOrderCommand, Unit>
 {
-    private readonly IOrderRepository _orderRepository;
-    private readonly IProductRepository _productRepository;
-
-    public AddProductsToOrderCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository)
-    {
-        _orderRepository = orderRepository;
-        _productRepository = productRepository;
-    }
+    private readonly IOrderRepository _orderRepository = orderRepository;
+    private readonly IProductRepository _productRepository = productRepository;
 
     public async Task<Unit> Handle(AddProductsToOrderCommand request, CancellationToken cancellationToken)
     {

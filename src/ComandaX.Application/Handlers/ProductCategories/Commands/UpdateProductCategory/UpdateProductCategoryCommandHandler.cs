@@ -4,14 +4,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.ProductCategories.Commands.UpdateProductCategory;
 
-public class UpdateProductCategoryCommandHandler : IRequestHandler<UpdateProductCategoryCommand, Unit>
+public class UpdateProductCategoryCommandHandler(IProductCategoryRepository repository) : IRequestHandler<UpdateProductCategoryCommand, Unit>
 {
-    private readonly IProductCategoryRepository _repository;
-
-    public UpdateProductCategoryCommandHandler(IProductCategoryRepository repository)
-    {
-        _repository = repository;
-    }
+    private readonly IProductCategoryRepository _repository = repository;
 
     public async Task<Unit> Handle(UpdateProductCategoryCommand request, CancellationToken cancellationToken)
     {

@@ -4,14 +4,9 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.ProductCategories.Commands.DeleteProductCategory;
 
-public class DeleteProductCategoryCommandHandler : IRequestHandler<DeleteProductCategoryCommand>
+public class DeleteProductCategoryCommandHandler(IProductCategoryRepository productCategoryRepository) : IRequestHandler<DeleteProductCategoryCommand>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-
-    public DeleteProductCategoryCommandHandler(IProductCategoryRepository productCategoryRepository)
-    {
-        _productCategoryRepository = productCategoryRepository;
-    }
+    private readonly IProductCategoryRepository _productCategoryRepository = productCategoryRepository;
 
     public async Task Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
     {

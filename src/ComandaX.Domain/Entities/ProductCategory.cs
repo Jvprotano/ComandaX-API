@@ -1,17 +1,16 @@
 namespace ComandaX.Domain.Entities;
 
-public class ProductCategory : BaseEntity
+public class ProductCategory(string name, string? icon = null) : BaseEntity
 {
-    public ProductCategory(string name, string? icon = null)
-    {
-        Name = name;
-        Icon = icon;
-    }
-
-    public string Name { get; private set; }
+    public string Name { get; private set; } = name;
+    public string? Icon { get; private set; } = icon;
+    public IList<Product>? Products { get; set; }
 
     public void UpdateName(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name cannot be empty", nameof(name));
+
         Name = name;
     }
 
@@ -19,8 +18,4 @@ public class ProductCategory : BaseEntity
     {
         Icon = icon;
     }
-
-    public string? Icon { get; private set; }
-
-    public IList<Product>? Products { get; set; }
 }

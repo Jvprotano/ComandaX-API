@@ -6,15 +6,8 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Products.Commands.CreateProduct;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductDto>
+public class CreateProductCommandHandler(IProductRepository repository) : IRequestHandler<CreateProductCommand, ProductDto>
 {
-    private readonly IProductRepository _repository;
-
-    public CreateProductCommandHandler(IProductRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var productRequest = new Product(request.Name, request.Price);
@@ -25,7 +18,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         if (request.ProductCategoryId.HasValue)
             productRequest.SetProductCategory(request.ProductCategoryId.Value);
 
-        var product = await _repository.AddAsync(productRequest);
+        var product = await repository.AddAsync(productRequest);
 
         return product.AsDto();
     }
