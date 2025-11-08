@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
             .AddDataLoader<GetTableByIdDataLoader>()
             .AddDataLoader<GetProductCategoryByIdDataLoader>()
             .AddDataLoader<GetProductByIdDataLoader>()
+            .AddDataLoader<GetOrderByIdDataLoader>()
             .AddResolver<CustomerTabResolvers>()
             .AddResolver<ProductResolvers>()
             .AddResolver<OrderProductResolvers>()

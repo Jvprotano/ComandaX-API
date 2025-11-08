@@ -10,10 +10,11 @@ namespace ComandaX.WebAPI.GraphQL.Queries;
 public class OrderQuery
 {
     [UseProjection]
-    public async Task<IQueryable<OrderDto>> GetOrders([Service] IMediator mediator)
+    public async Task<IList<OrderDto>> GetOrders([Service] IMediator mediator)
     {
         var orders = await mediator.Send(new GetOrdersQuery());
-        return orders.Select(order => order.AsDto());
+        var orderDtos = orders.Select(order => order.AsDto()).ToList();
+        return orderDtos;
     }
 
     public async Task<OrderDto> GetOrderById(Guid id, [Service] IMediator mediator)

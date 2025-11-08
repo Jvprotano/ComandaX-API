@@ -3,4 +3,4 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Queries.GetOrders;
 
-public sealed record GetOrdersQuery : IRequest<IQueryable<Order>>;
+public sealed record GetOrdersQuery : IRequest<IList<Order>>;

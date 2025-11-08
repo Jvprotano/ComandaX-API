@@ -11,7 +11,7 @@ public static class CustomerTabExtension
             customerTab.Id,
             customerTab.Name,
             customerTab.TableId,
-            customerTab.Status);
+            customerTab.Status,
+            customerTab.Orders?.Select(o => o.Id).ToList());
     }
-
 }

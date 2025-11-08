@@ -8,14 +8,19 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
 {
     public async Task<Order?> GetByIdAsync(Guid id)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        var order = await _context.Orders
+            .Include(o => o.OrderProducts)
+            .FirstOrDefaultAsync(o => o.Id == id);
 
         return order;
     }
 
-    public Task<IQueryable<Order>> GetAllAsync()
+    public async Task<IList<Order>> GetAllAsync()
     {
-        return Task.FromResult(_context.Orders.AsQueryable());
+        return await _context.Orders
+            .Include(o => o.OrderProducts)
+            .ThenInclude(o => o.Product)
+            .ToListAsync();
     }
 
     public async Task<Order> AddAsync(Order order)
@@ -28,5 +33,13 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
     {
         _context.Orders.Update(order);
         return Task.CompletedTask;
+    }
+
+    public async Task<IList<Order>> GetByIdsAsync(IReadOnlyList<Guid> ids)
+    {
+        return await _context.Orders
+            .Include(o => o.OrderProducts)
+            .Where(o => ids.Contains(o.Id))
+            .ToListAsync();
     }
 }

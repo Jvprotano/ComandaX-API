@@ -5,7 +5,8 @@ namespace ComandaX.Application.Interfaces;
 public interface IOrderRepository
 {
     Task<Order?> GetByIdAsync(Guid id);
-    Task<IQueryable<Order>> GetAllAsync();
+    Task<IList<Order>> GetAllAsync();
     Task<Order> AddAsync(Order order);
     Task UpdateAsync(Order order);
+    Task<IList<Order>> GetByIdsAsync(IReadOnlyList<Guid> ids);
 }
