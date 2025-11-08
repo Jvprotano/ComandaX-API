@@ -11,6 +11,21 @@ using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("RestrictedPolicy", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 builder.Services.AddInfrastructure();
 
 builder.Services.AddGraphQLServices();
@@ -28,21 +43,6 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<As
 // Add FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("RestrictedPolicy", policy =>
-    {
-        var allowedOrigins = builder.Configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>() ?? [];
-
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
 
 builder.Services.AddAuthorization();
 
@@ -69,9 +69,9 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
-
 app.UseCors("AllowAll");
+
+app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.MapGraphQL("/graphql");
