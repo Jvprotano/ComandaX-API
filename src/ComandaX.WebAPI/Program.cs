@@ -71,10 +71,11 @@ var app = builder.Build();
 
 app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
 
+app.UseCors("AllowAll");
+
 app.UseHttpsRedirection();
 app.MapGraphQL("/graphql");
 
-app.UseCors("AllowAll");
 app.UseRouting();
 
 app.MapGet("/", () => "API running ✅");

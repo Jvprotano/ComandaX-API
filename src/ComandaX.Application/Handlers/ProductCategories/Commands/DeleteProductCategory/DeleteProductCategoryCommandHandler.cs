@@ -12,6 +12,7 @@ public class DeleteProductCategoryCommandHandler(IProductCategoryRepository prod
     {
         var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException(request.Id);
 
-        await _productCategoryRepository.DeleteAsync(productCategory);
+        productCategory.SoftDelete();
+        await _productCategoryRepository.UpdateAsync(productCategory);
     }
 }
