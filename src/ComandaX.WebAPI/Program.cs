@@ -11,6 +11,21 @@ using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddInfrastructure();
+builder.Services.AddGraphQLServices();
+
+builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseNpgsql(connectionString);
+});
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());
+builder.Services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("RestrictedPolicy", policy =>
@@ -26,26 +41,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddInfrastructure();
-
-builder.Services.AddGraphQLServices();
-
-builder.Configuration.AddEnvironmentVariables();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
-});
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());
-
-// Add FluentValidation
-builder.Services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
 builder.Services.AddAuthorization();
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -69,19 +65,20 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
-
 app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
-app.MapGraphQL("/graphql");
+
+app.UseCors("RestrictedPolicy");
 
 app.UseRouting();
 
-app.MapGet("/", () => "API running ✅");
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGraphQL("/graphql");
+
+app.MapGet("/", () => "API running ✅");
 
 using (var scope = app.Services.CreateScope())
 {
