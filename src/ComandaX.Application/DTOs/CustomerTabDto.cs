@@ -1,12 +1,15 @@
+using ComandaX.Domain.Enums;
+
 namespace ComandaX.Application.DTOs;
 
 public sealed class CustomerTabDto
 {
-    public CustomerTabDto(Guid id, string? name, Guid? tableId)
+    public CustomerTabDto(Guid id, string? name, Guid? tableId, CustomerTabEnum status)
     {
-        this.Id = id;
-        this.Name = name;
-        this.TableId = tableId;
+        Id = id;
+        Name = name;
+        TableId = tableId;
+        Status = status;
     }
     public CustomerTabDto()
     {
@@ -17,4 +20,5 @@ public sealed class CustomerTabDto
     public string? Name { get; set; }
     public Guid? TableId { get; set; }
     public TableDto? Table { get; set; }
+    public CustomerTabEnum Status { get; set; }
 }

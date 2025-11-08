@@ -21,14 +21,12 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
     public async Task<Order> AddAsync(Order order)
     {
         await _context.Orders.AddAsync(order);
-        await _context.SaveChangesAsync();
-
         return order;
     }
 
     public Task UpdateAsync(Order order)
     {
         _context.Orders.Update(order);
-        return _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

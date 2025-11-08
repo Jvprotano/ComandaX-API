@@ -4,19 +4,19 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Commands.CloseOrder;
 
-public class CloseOrderCommandHandler(IOrderRepository orderRepository, ITableRepository tableRepository) : IRequestHandler<CloseOrderCommand, Unit>
+public class CloseOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CloseOrderCommand, Unit>
 {
-    private readonly IOrderRepository _orderRepository = orderRepository;
-    private readonly ITableRepository _tableRepository = tableRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Unit> Handle(CloseOrderCommand request, CancellationToken cancellationToken)
     {
-        var order = await _orderRepository.GetByIdAsync(request.OrderId)
+        var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId)
             ?? throw new RecordNotFoundException($"Order with Id {request.OrderId} not found.");
 
         order.CloseOrder();
 
-        await _orderRepository.UpdateAsync(order);
+        await _unitOfWork.Orders.UpdateAsync(order);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

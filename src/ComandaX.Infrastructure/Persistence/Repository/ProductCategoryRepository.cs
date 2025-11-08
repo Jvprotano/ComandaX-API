@@ -9,7 +9,6 @@ public class ProductCategoryRepository(AppDbContext _context) : IProductCategory
     public async Task<ProductCategory> AddAsync(ProductCategory productCategory)
     {
         await _context.AddAsync(productCategory);
-        await _context.SaveChangesAsync();
         return productCategory;
     }
 
@@ -28,9 +27,9 @@ public class ProductCategoryRepository(AppDbContext _context) : IProductCategory
         return await _context.ProductCategories.Where(pc => keys.Contains(pc.Id)).ToListAsync();
     }
 
-    public async Task UpdateAsync(ProductCategory productCategory)
+    public Task UpdateAsync(ProductCategory productCategory)
     {
         _context.ProductCategories.Update(productCategory);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

@@ -8,15 +8,22 @@ namespace ComandaX.Tests.Orders.Commands.AddProductsToOrder;
 
 public class AddProductsToOrderCommandHandlerTests
 {
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
     private readonly Mock<IProductRepository> _productRepositoryMock;
     private readonly AddProductsToOrderCommandHandler _handler;
 
     public AddProductsToOrderCommandHandlerTests()
     {
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
         _orderRepositoryMock = new Mock<IOrderRepository>();
         _productRepositoryMock = new Mock<IProductRepository>();
-        _handler = new AddProductsToOrderCommandHandler(_orderRepositoryMock.Object, _productRepositoryMock.Object);
+
+        // Setup Unit of Work to return mocked repositories
+        _unitOfWorkMock.Setup(u => u.Orders).Returns(_orderRepositoryMock.Object);
+        _unitOfWorkMock.Setup(u => u.Products).Returns(_productRepositoryMock.Object);
+
+        _handler = new AddProductsToOrderCommandHandler(_unitOfWorkMock.Object);
     }
 
     [Fact]
@@ -38,5 +45,6 @@ public class AddProductsToOrderCommandHandlerTests
 
         // Assert
         _orderRepositoryMock.Verify(r => r.UpdateAsync(It.Is<Order>(o => o.Id == orderId && o.OrderProducts.Count == 1)), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

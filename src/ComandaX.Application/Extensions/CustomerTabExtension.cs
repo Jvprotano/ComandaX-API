@@ -10,7 +10,8 @@ public static class CustomerTabExtension
         return new CustomerTabDto(
             customerTab.Id,
             customerTab.Name,
-            customerTab.TableId);
+            customerTab.TableId,
+            customerTab.Status);
     }
 
 }

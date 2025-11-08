@@ -9,7 +9,7 @@ public class CustomerTabRepository(AppDbContext _context) : ICustomerTabReposito
     public async Task<CustomerTab> CreateAsync(CustomerTab tab)
     {
         await _context.CustomerTabs.AddAsync(tab);
-        return await _context.SaveChangesAsync().ContinueWith(_ => tab);
+        return tab;
     }
 
     public async Task<IQueryable<CustomerTab>> GetAllAsync()

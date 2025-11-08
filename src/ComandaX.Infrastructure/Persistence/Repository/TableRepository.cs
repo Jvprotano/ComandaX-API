@@ -9,7 +9,7 @@ public class TableRepository(AppDbContext _context) : ITableRepository
     public async Task<Table> AddAsync(Table table)
     {
         await _context.Tables.AddAsync(table);
-        return await _context.SaveChangesAsync().ContinueWith(_ => table);
+        return table;
     }
 
     public async Task<IEnumerable<Table>> GetAllAsync()
@@ -33,13 +33,13 @@ public class TableRepository(AppDbContext _context) : ITableRepository
         var table = await _context.Tables.FirstAsync(table => table.Id == id);
         table.SetBusy();
 
-        await this.UpdateAsync(table);
+        await UpdateAsync(table);
     }
 
 
-    public async Task UpdateAsync(Table table)
+    public Task UpdateAsync(Table table)
     {
         _context.Tables.Update(table);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

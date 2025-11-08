@@ -4,13 +4,13 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.ProductCategories.Commands.UpdateProductCategory;
 
-public class UpdateProductCategoryCommandHandler(IProductCategoryRepository repository) : IRequestHandler<UpdateProductCategoryCommand, Unit>
+public class UpdateProductCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateProductCategoryCommand, Unit>
 {
-    private readonly IProductCategoryRepository _repository = repository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Unit> Handle(UpdateProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        var productCategory = await _repository.GetByIdAsync(request.Id);
+        var productCategory = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id);
 
         if (productCategory == null)
             throw new RecordNotFoundException("Product category not found");
@@ -21,7 +21,8 @@ public class UpdateProductCategoryCommandHandler(IProductCategoryRepository repo
         if (request.Icon.HasValue && request.Icon.Value != string.Empty)
             productCategory.UpdateIcon(request.Icon.Value);
 
-        await _repository.UpdateAsync(productCategory);
+        await _unitOfWork.ProductCategories.UpdateAsync(productCategory);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

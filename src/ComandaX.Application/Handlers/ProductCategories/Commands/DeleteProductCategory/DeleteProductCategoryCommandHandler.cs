@@ -4,15 +4,16 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.ProductCategories.Commands.DeleteProductCategory;
 
-public class DeleteProductCategoryCommandHandler(IProductCategoryRepository productCategoryRepository) : IRequestHandler<DeleteProductCategoryCommand>
+public class DeleteProductCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteProductCategoryCommand>
 {
-    private readonly IProductCategoryRepository _productCategoryRepository = productCategoryRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
     {
-        var productCategory = await _productCategoryRepository.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException(request.Id);
+        var productCategory = await _unitOfWork.ProductCategories.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException(request.Id);
 
         productCategory.SoftDelete();
-        await _productCategoryRepository.UpdateAsync(productCategory);
+        await _unitOfWork.ProductCategories.UpdateAsync(productCategory);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

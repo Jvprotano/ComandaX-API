@@ -4,13 +4,13 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler(IProductRepository repository) : IRequestHandler<UpdateProductCommand, Unit>
+public class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateProductCommand, Unit>
 {
-    private readonly IProductRepository _repository = repository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _repository.GetByIdAsync(request.Id)
+        var product = await _unitOfWork.Products.GetByIdAsync(request.Id)
             ?? throw new RecordNotFoundException("Product not found");
 
         if (!string.IsNullOrWhiteSpace(request.Name))
@@ -25,7 +25,8 @@ public class UpdateProductCommandHandler(IProductRepository repository) : IReque
         if (request.NeedPreparation != null)
             product.SetNeedPreparation(request.NeedPreparation.Value);
 
-        await _repository.UpdateAsync(product);
+        await _unitOfWork.Products.UpdateAsync(product);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
     }

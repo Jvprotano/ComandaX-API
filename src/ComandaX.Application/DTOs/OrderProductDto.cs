@@ -8,9 +8,9 @@ public sealed record OrderProductDto
     }
     public OrderProductDto(Guid productId, int quantity, decimal totalPrice)
     {
-        this.ProductId = productId;
-        this.Quantity = quantity;
-        this.TotalPrice = totalPrice;
+        ProductId = productId;
+        Quantity = quantity;
+        TotalPrice = totalPrice;
     }
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }

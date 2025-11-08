@@ -10,11 +10,11 @@ public sealed class OrderDto
     }
     public OrderDto(Guid id, int code, Guid? customerTabId, List<OrderProductDto> products, OrderStatusEnum status)
     {
-        this.Id = id;
-        this.Code = code;
-        this.CustomerTabId = customerTabId;
-        this.Products = products;
-        this.Status = status;
+        Id = id;
+        Code = code;
+        CustomerTabId = customerTabId;
+        Products = products;
+        Status = status;
     }
     public Guid Id { get; set; }
     public int Code { get; set; }

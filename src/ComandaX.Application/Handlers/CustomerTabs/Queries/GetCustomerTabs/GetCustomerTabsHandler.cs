@@ -8,6 +8,7 @@ public class GetCustomerTabsHandler(ICustomerTabRepository _customerTabRepositor
 {
     public async Task<IQueryable<CustomerTab>> Handle(GetCustomerTabsQuery request, CancellationToken cancellationToken)
     {
-        return await _customerTabRepository.GetAllAsync();
+        var customertabs = await _customerTabRepository.GetAllAsync();
+        return customertabs;
     }
 }

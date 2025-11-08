@@ -4,16 +4,17 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Commands.DeleteTable;
 
-public class DeleteTableCommandHandler(ITableRepository tableRepository) : IRequestHandler<DeleteTableCommand>
+public class DeleteTableCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteTableCommand>
 {
-    private readonly ITableRepository _tableRepository = tableRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task Handle(DeleteTableCommand request, CancellationToken cancellationToken)
     {
-        var table = await _tableRepository.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException(request.Id);
+        var table = await _unitOfWork.Tables.GetByIdAsync(request.Id) ?? throw new RecordNotFoundException(request.Id);
 
         table.SoftDelete();
 
-        await _tableRepository.UpdateAsync(table);
+        await _unitOfWork.Tables.UpdateAsync(table);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

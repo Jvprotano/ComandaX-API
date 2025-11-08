@@ -6,16 +6,19 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Commands.UpdateTable;
 
-public class UpdateTableHandler(ITableRepository tableRepository) : IRequestHandler<UpdateTableCommand, TableDto>
+public class UpdateTableHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateTableCommand, TableDto>
 {
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
     public async Task<TableDto> Handle(UpdateTableCommand request, CancellationToken cancellationToken)
     {
-        var table = await tableRepository.GetByIdAsync(request.Id)
+        var table = await _unitOfWork.Tables.GetByIdAsync(request.Id)
             ?? throw new RecordNotFoundException($"Table with Id {request.Id} not found");
 
         table.SetNumber(request.Number);
 
-        await tableRepository.UpdateAsync(table);
+        await _unitOfWork.Tables.UpdateAsync(table);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return table.AsDto();
     }

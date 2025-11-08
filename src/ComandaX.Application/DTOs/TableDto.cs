@@ -6,9 +6,9 @@ public sealed class TableDto
 {
     public TableDto(Guid id, int? number, TableStatusEnum status)
     {
-        this.Id = id;
-        this.Number = number;
-        this.Status = status;
+        Id = id;
+        Number = number;
+        Status = status;
     }
     public TableDto()
     {

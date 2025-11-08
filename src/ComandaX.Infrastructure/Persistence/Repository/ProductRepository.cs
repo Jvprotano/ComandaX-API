@@ -9,8 +9,6 @@ public class ProductRepository(AppDbContext _context) : IProductRepository
     public async Task<Product> AddAsync(Product product)
     {
         await _context.Products.AddAsync(product);
-        await _context.SaveChangesAsync();
-
         return product;
     }
 
@@ -29,9 +27,9 @@ public class ProductRepository(AppDbContext _context) : IProductRepository
         return await _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
     }
 
-    public async Task UpdateAsync(Product product)
+    public Task UpdateAsync(Product product)
     {
         _context.Products.Update(product);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }
