@@ -44,4 +44,11 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
     {
         return _context.Orders;
     }
+
+    public async Task<IList<Order>> GetByCustomerTabIdAsync(Guid customerTabId)
+    {
+        return await _context.Orders
+            .Where(o => o.CustomerTabId == customerTabId)
+            .ToListAsync();
+    }
 }

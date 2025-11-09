@@ -10,4 +10,5 @@ public interface IOrderRepository
     Task<IList<Order>> GetByIdsAsync(IReadOnlyList<Guid> ids);
     Task<IQueryable<Order>> GetAllAsync();
     IQueryable<Order> GetAll();
+    Task<IList<Order>> GetByCustomerTabIdAsync(Guid customerTabId);
 }

@@ -22,4 +22,10 @@ public class CustomerTabRepository(AppDbContext _context) : ICustomerTabReposito
     {
         return await _context.CustomerTabs.FirstOrDefaultAsync(t => t.Id == id);
     }
+
+    public Task UpdateAsync(CustomerTab tab)
+    {
+        _context.CustomerTabs.Update(tab);
+        return Task.CompletedTask;
+    }
 }

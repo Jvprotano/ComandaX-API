@@ -1,6 +1,65 @@
 # GraphQL Query Examples
 
-This document contains example GraphQL queries to test the ComandaX API, specifically demonstrating how product information is now included when retrieving orders and customer tabs.
+This document contains example GraphQL queries and mutations to test the ComandaX API, specifically demonstrating how product information is now included when retrieving orders and customer tabs.
+
+## Customer Tab Operations
+
+### Close Customer Tab
+
+Closes a customer tab, closes all associated orders, and sets the table as available (free).
+
+**Mutation:**
+
+```graphql
+mutation {
+  closeCustomerTab(
+    command: { customerTabId: "123e4567-e89b-12d3-a456-426614174000" }
+  )
+}
+```
+
+**Response:**
+
+```json
+{
+  "data": {
+    "closeCustomerTab": true
+  }
+}
+```
+
+**What happens when you close a customer tab:**
+
+1. The customer tab status is set to `Closed`
+2. All orders associated with the customer tab are closed (status set to `Closed`)
+3. If the customer tab has a table assigned, the table status is set to `Free`
+4. All changes are saved in a single database transaction
+
+**Validation:**
+
+- Customer tab ID is required
+- Customer tab must exist
+- If the customer tab has a table, the table must exist
+
+**Error Example:**
+
+```json
+{
+  "errors": [
+    {
+      "message": "Customer tab with Id 123e4567-e89b-12d3-a456-426614174000 not found.",
+      "extensions": {
+        "code": "NOT_FOUND"
+      }
+    }
+  ],
+  "data": {
+    "closeCustomerTab": null
+  }
+}
+```
+
+---
 
 ## Testing Product Information in Orders
 
@@ -31,6 +90,7 @@ query GetOrdersWithProducts {
 ```
 
 **What this demonstrates:**
+
 - Orders now include product details through the `product` field in `OrderProductDto`
 - The DataLoader pattern efficiently batches product queries to prevent N+1 problems
 - Clients can request as much or as little product information as needed
@@ -149,6 +209,7 @@ query TestDataLoaderEfficiency {
 ```
 
 **Behind the scenes:**
+
 1. Query fetches all orders
 2. Query fetches all order products
 3. DataLoader collects all unique product IDs
@@ -161,11 +222,7 @@ query TestDataLoaderEfficiency {
 
 ```graphql
 mutation CreateProduct {
-  createProductAsync(
-    name: "Test Burger"
-    price: 15.99
-    needPreparation: true
-  ) {
+  createProductAsync(name: "Test Burger", price: 15.99, needPreparation: true) {
     id
     name
     price
@@ -309,8 +366,8 @@ If product information is not appearing:
 ## Schema Exploration
 
 Use the GraphQL Playground's "Docs" tab to explore:
+
 - Available queries and mutations
 - Field types and relationships
 - Required vs optional fields
 - Available filters and sorting options
-

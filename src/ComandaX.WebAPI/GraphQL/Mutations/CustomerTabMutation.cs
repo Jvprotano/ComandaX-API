@@ -1,3 +1,4 @@
+using ComandaX.Application.Handlers.CustomerTabs.Commands.CloseCustomerTab;
 using ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -10,5 +11,11 @@ public class CustomerTabMutation
     public async Task<CustomerTab> CreateCustomerTab(CreateCustomerTabCommand input, [Service] IMediator mediator)
     {
         return await mediator.Send(input);
+    }
+
+    public async Task<bool> CloseCustomerTab(CloseCustomerTabCommand command, [Service] IMediator mediator)
+    {
+        await mediator.Send(command);
+        return true;
     }
 }
