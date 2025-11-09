@@ -18,10 +18,11 @@ public class OrderProduct : BaseEntity
         TotalPrice = quantity * productPrice;
     }
     public Guid OrderId { get; private set; }
-    public Order? Order { get; set; }
     public Guid ProductId { get; private set; }
-    public Product? Product { get; set; }
     public decimal TotalPrice { get; private set; }
     public int Quantity { get; private set; }
     public OrderProductEnum? Status { get; private set; }
+
+    public Order? Order { get; set; }
+    public Product? Product { get; set; }
 }

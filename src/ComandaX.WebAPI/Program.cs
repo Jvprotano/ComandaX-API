@@ -16,10 +16,16 @@ builder.Services.AddGraphQLServices();
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+// Register Pooled DbContextFactory for all database operations
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+// Register scoped DbContext for migrations and seeding (created from factory)
+builder.Services.AddScoped(sp =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
+    var factory = sp.GetRequiredService<IDbContextFactory<AppDbContext>>();
+    return factory.CreateDbContext();
 });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());

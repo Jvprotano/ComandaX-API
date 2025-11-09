@@ -15,14 +15,6 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
         return order;
     }
 
-    public async Task<IList<Order>> GetAllAsync()
-    {
-        return await _context.Orders
-            .Include(o => o.OrderProducts)
-            .ThenInclude(o => o.Product)
-            .ToListAsync();
-    }
-
     public async Task<Order> AddAsync(Order order)
     {
         await _context.Orders.AddAsync(order);
@@ -41,5 +33,15 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
             .Include(o => o.OrderProducts)
             .Where(o => ids.Contains(o.Id))
             .ToListAsync();
+    }
+
+    public async Task<IList<Order>> GetAllAsync()
+    {
+        return await _context.Orders.ToListAsync();
+    }
+
+    public IQueryable<Order> GetAll()
+    {
+        return _context.Orders;
     }
 }

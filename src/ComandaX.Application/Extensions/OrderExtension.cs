@@ -11,7 +11,6 @@ public static class OrderExtension
             order.Id,
             order.Code,
             order.CustomerTabId,
-            [.. order.OrderProducts.Select(p => new OrderProductDto(p.ProductId, p.Quantity, p.TotalPrice, p.Product?.AsDto()))],
             order.Status
         );
     }

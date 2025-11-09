@@ -1,16 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using ComandaX.Application.DTOs;
+using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
+using ComandaX.Infrastructure;
 
 namespace ComandaX.WebAPI.GraphQL.DataLoaders;
 
-public class GetProductByIdDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IProductRepository productRepository) : BatchDataLoader<Guid, Product>(batchScheduler, options)
+public class GetProductByIdDataLoader(
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions options,
+    IDbContextFactory<AppDbContext> dbContextFactory) : BatchDataLoader<Guid, ProductDto>(batchScheduler, options)
 {
-    private readonly IProductRepository _productRepository = productRepository;
-
-    protected override async Task<IReadOnlyDictionary<Guid, Product>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
+    protected override async Task<IReadOnlyDictionary<Guid, ProductDto>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
     {
-        var result = await _productRepository.GetByIdsAsync(keys);
-        return result.ToDictionary(p => p.Id);
+        await using var db = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        return await db.Products
+            .Where(p => keys.Contains(p.Id))
+            .Select(p => p.AsDto())
+            .ToDictionaryAsync(p => p.Id, cancellationToken);
     }
 }
 

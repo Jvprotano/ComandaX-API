@@ -12,12 +12,12 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddGraphQLServer()
-            .AddType<OrderType>()
             .AddType<TableType>()
             .AddType<CustomerTabType>()
             .AddType<ProductCategoryType>()
             .AddType<ProductType>()
             .AddType<OrderProductType>()
+            .AddType<OrderType>()
             .AddQueryType(d => d.Name("Query"))
             .AddType<ProductQuery>()
             .AddType<TableQuery>()
@@ -33,14 +33,15 @@ public static class ServiceCollectionExtensions
             .AddType<ProductCategoryMutation>()
             .AddDataLoader<GetTableByIdDataLoader>()
             .AddDataLoader<GetProductCategoryByIdDataLoader>()
+            .AddDataLoader<GetOrderProductByOrderIdDataLoader>()
             .AddDataLoader<GetProductByIdDataLoader>()
-            .AddDataLoader<GetOrderByIdDataLoader>()
+            .AddDataLoader<GetOrderByCustomerTabIdDataLoader>()
             .AddResolver<CustomerTabResolvers>()
             .AddResolver<ProductResolvers>()
             .AddResolver<OrderProductResolvers>()
+            .AddResolver<OrderResolver>()
             .AddProjections()
-            .AddFiltering()
-            .AddSorting();
+            .AddFiltering();
 
         return services;
     }

@@ -24,13 +24,10 @@ public class CustomerTabResolvers
 
     public async Task<IEnumerable<OrderDto>> GetOrders(
         [Parent] CustomerTabDto tab,
-        GetOrderByIdDataLoader dataLoader,
+        GetOrderByCustomerTabIdDataLoader dataLoader,
         CancellationToken cancellationToken)
     {
-        if (tab.OrderIds == null || !tab.OrderIds.Any())
-            return [];
-
-        var orders = await dataLoader.LoadAsync(tab.OrderIds.ToArray(), cancellationToken);
-        return orders.Where(o => o != null).Select(o => o!.AsDto());
+        var orders = await dataLoader.LoadAsync(tab.Id, cancellationToken);
+        return orders?.Where(o => o != null) ?? [];
     }
 }

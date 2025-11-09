@@ -18,7 +18,7 @@ public sealed class Order : BaseEntity
     public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.Created;
     public Guid? CustomerTabId { get; private set; }
     public CustomerTab? CustomerTab { get; set; }
-    public IList<OrderProduct> OrderProducts { get; private set; } = [];
+    public ICollection<OrderProduct> OrderProducts { get; private set; } = [];
 
     public void AddProduct(Guid productId, int quantity, decimal price)
     {

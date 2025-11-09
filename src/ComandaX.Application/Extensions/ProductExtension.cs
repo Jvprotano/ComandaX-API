@@ -10,7 +10,7 @@ public static class ProductExtension
         return new ProductDto(
             product.Id,
             product.Name,
-            product.Price,
+            product.Price.AsMoney(),
             product.Code,
             product.NeedPreparation,
             product.ProductCategoryId);

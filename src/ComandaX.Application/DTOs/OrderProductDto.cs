@@ -2,19 +2,16 @@ namespace ComandaX.Application.DTOs;
 
 public sealed record OrderProductDto
 {
-    public OrderProductDto()
-    {
-
-    }
-    public OrderProductDto(Guid productId, int quantity, decimal totalPrice, ProductDto? product = null)
+    public OrderProductDto() { }
+    public OrderProductDto(Guid productId, Guid orderId, int quantity, decimal totalPrice)
     {
         ProductId = productId;
         Quantity = quantity;
         TotalPrice = totalPrice;
-        Product = product;
+        OrderId = orderId;
     }
+    public Guid OrderId { get; set; }
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
     public decimal TotalPrice { get; set; }
-    public ProductDto? Product { get; set; }
 }

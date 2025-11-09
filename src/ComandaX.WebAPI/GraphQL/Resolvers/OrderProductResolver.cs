@@ -11,12 +11,6 @@ public class OrderProductResolvers
         GetProductByIdDataLoader dataLoader,
         CancellationToken cancellationToken)
     {
-        var product = await dataLoader.LoadAsync(orderProduct.ProductId, cancellationToken);
-
-        if (product == null)
-            return null;
-
-        return product.AsDto();
+        return await dataLoader.LoadAsync(orderProduct.ProductId, cancellationToken);
     }
 }
-

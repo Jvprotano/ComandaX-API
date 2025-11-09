@@ -9,8 +9,7 @@ public class CustomerTabType : ObjectType<CustomerTabDto>
     {
         descriptor.Field(t => t.Name).Type<StringType>();
         descriptor.Field(t => t.TableId).IsProjected();
-        descriptor.Field(t => t.OrderIds).IsProjected();
-        descriptor.Field(t => t.Table).ResolveWith<CustomerTabResolvers>(r => r.GetTable(default!, default!, default!)).Type<TableType>();
-        descriptor.Field(t => t.Orders).ResolveWith<CustomerTabResolvers>(r => r.GetOrders(default!, default!, default!)).Type<ListType<OrderType>>().UseProjection();
+        descriptor.Field("table").ResolveWith<CustomerTabResolvers>(r => r.GetTable(default!, default!, default!)).Type<TableType>();
+        descriptor.Field("orders").ResolveWith<CustomerTabResolvers>(r => r.GetOrders(default!, default!, default!)).Type<ListType<OrderType>>().UseProjection();
     }
 }
