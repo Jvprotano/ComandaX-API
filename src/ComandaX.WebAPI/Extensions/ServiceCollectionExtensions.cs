@@ -1,4 +1,5 @@
 using ComandaX.WebAPI.GraphQL.DataLoaders;
+using ComandaX.WebAPI.GraphQL.Filters;
 using ComandaX.WebAPI.GraphQL.Mutations;
 using ComandaX.WebAPI.GraphQL.Queries;
 using ComandaX.WebAPI.GraphQL.Resolvers;
@@ -40,6 +41,7 @@ public static class ServiceCollectionExtensions
             .AddResolver<ProductResolvers>()
             .AddResolver<OrderProductResolvers>()
             .AddResolver<OrderResolver>()
+            .AddErrorFilter<ValidationErrorFilter>()
             .AddProjections()
             .AddFiltering();
 

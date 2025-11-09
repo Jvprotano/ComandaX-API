@@ -42,7 +42,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             var json = JsonSerializer.Serialize(response, _options);
             await context.Response.WriteAsync(json);
         }
-        catch (ValidationException ex)
+        catch (FluentValidation.ValidationException ex)
         {
             _logger.LogWarning(ex, "Validation failed: {Errors}", string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
 

@@ -1,3 +1,4 @@
+using ComandaX.Application.Exceptions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -10,9 +11,16 @@ public class CreateCustomerTabCommandHandler(IUnitOfWork unitOfWork) : IRequestH
 
     public async Task<CustomerTab> Handle(CreateCustomerTabCommand request, CancellationToken cancellationToken)
     {
-        var table = await _unitOfWork.Tables.GetByIdAsync(request.TableId);
+        var customerTab = new CustomerTab(request.Name, request.TableId);
 
-        var customerTab = new CustomerTab(request.Name, table?.Id);
+        if (request.TableId.HasValue)
+        {
+            var table = await _unitOfWork.Tables.GetByIdAsync(request.TableId.Value)
+                ?? throw new RecordNotFoundException($"Table {request.TableId} not found");
+
+            table.SetBusy();
+            await _unitOfWork.Tables.UpdateAsync(table);
+        }
 
         await _unitOfWork.CustomerTabs.CreateAsync(customerTab);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

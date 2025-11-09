@@ -12,6 +12,10 @@ public class GetOrdersQueryHandler(IOrderRepository orderRepository) : IRequestH
     public async Task<IList<OrderDto>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
         var orders = await _orderRepository.GetAllAsync();
+
+        if (request.Status.HasValue)
+            orders = orders.Where(o => o.Status == request.Status.Value);
+
         return [.. orders.Select(o => o.AsDto())];
     }
 }

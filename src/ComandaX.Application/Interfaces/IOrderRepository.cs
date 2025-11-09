@@ -8,6 +8,6 @@ public interface IOrderRepository
     Task<Order> AddAsync(Order order);
     Task UpdateAsync(Order order);
     Task<IList<Order>> GetByIdsAsync(IReadOnlyList<Guid> ids);
-    Task<IList<Order>> GetAllAsync();
+    Task<IQueryable<Order>> GetAllAsync();
     IQueryable<Order> GetAll();
 }

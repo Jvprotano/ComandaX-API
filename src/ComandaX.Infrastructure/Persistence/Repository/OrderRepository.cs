@@ -35,9 +35,9 @@ public class OrderRepository(AppDbContext _context) : IOrderRepository
             .ToListAsync();
     }
 
-    public async Task<IList<Order>> GetAllAsync()
+    public async Task<IQueryable<Order>> GetAllAsync()
     {
-        return await _context.Orders.ToListAsync();
+        return await Task.FromResult(_context.Orders);
     }
 
     public IQueryable<Order> GetAll()

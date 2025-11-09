@@ -15,9 +15,7 @@ public class CustomerTabRepository(AppDbContext _context) : ICustomerTabReposito
     public async Task<IQueryable<CustomerTab>> GetAllAsync()
     {
         return await Task.FromResult(
-            _context.CustomerTabs
-            .Include(customerTab => customerTab.Orders)
-            .AsQueryable());
+            _context.CustomerTabs);
     }
 
     public async Task<CustomerTab?> GetByIdAsync(Guid id)

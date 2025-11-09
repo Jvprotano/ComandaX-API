@@ -3,4 +3,4 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
 
-public sealed record CreateCustomerTabCommand(Guid TableId, string? Name) : IRequest<CustomerTab>;
+public sealed record CreateCustomerTabCommand(string Name, Guid? TableId) : IRequest<CustomerTab>;

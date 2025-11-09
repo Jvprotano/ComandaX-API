@@ -7,8 +7,7 @@ public class CreateCustomerTabCommandValidator : AbstractValidator<CreateCustome
     public CreateCustomerTabCommandValidator()
     {
         RuleFor(x => x.Name)
-            .MaximumLength(200).WithMessage("Customer name cannot exceed 200 characters")
-            .When(x => !string.IsNullOrEmpty(x.Name));
+            .NotEmpty().WithMessage("Customer name is required")
+            .MaximumLength(50).WithMessage("Customer name cannot exceed 50 characters");
     }
 }
-

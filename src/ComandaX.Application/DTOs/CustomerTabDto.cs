@@ -4,9 +4,12 @@ namespace ComandaX.Application.DTOs;
 
 public sealed class CustomerTabDto
 {
-    public CustomerTabDto() { }
+    public CustomerTabDto()
+    {
+        Name = string.Empty;
+    }
 
-    public CustomerTabDto(Guid id, string? name, Guid? tableId, CustomerTabEnum status)
+    public CustomerTabDto(Guid id, string name, Guid? tableId, CustomerTabStatusEnum status)
     {
         Id = id;
         Name = name;
@@ -15,7 +18,7 @@ public sealed class CustomerTabDto
     }
 
     public Guid Id { get; set; }
-    public string? Name { get; set; }
+    public string Name { get; set; }
     public Guid? TableId { get; set; }
-    public CustomerTabEnum Status { get; set; }
+    public CustomerTabStatusEnum Status { get; set; }
 }

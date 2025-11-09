@@ -1,6 +1,6 @@
 namespace ComandaX.Domain.Enums;
 
-public enum CustomerTabEnum
+public enum CustomerTabStatusEnum
 {
     Open,
     Closed
