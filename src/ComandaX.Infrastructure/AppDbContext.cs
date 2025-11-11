@@ -19,6 +19,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .Property(p => p.Code)
             .ValueGeneratedOnAdd();
 
+        modelBuilder.Entity<CustomerTab>()
+            .Property(p => p.Code)
+            .ValueGeneratedOnAdd();
+
         modelBuilder.Entity<Product>().HasQueryFilter(p => p.DeletedAt == null);
         modelBuilder.Entity<Table>().HasQueryFilter(t => t.DeletedAt == null);
         modelBuilder.Entity<ProductCategory>().HasQueryFilter(pc => pc.DeletedAt == null);

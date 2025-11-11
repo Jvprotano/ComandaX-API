@@ -14,10 +14,12 @@ public class CustomerTab : BaseEntity
         Name = name;
         TableId = tableId;
     }
+    public int Code { get; private set; }
     public string Name { get; private set; }
     public CustomerTabStatusEnum Status { get; private set; } = CustomerTabStatusEnum.Open;
     public Guid? TableId { get; private set; }
     public Table? Table { get; set; }
+    public ICollection<Order> Orders { get; private set; } = [];
 
     public void Close()
     {

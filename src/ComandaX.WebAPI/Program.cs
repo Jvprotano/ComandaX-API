@@ -8,6 +8,8 @@ using ComandaX.Infrastructure;
 using ComandaX.WebAPI.Extensions;
 using FluentValidation;
 using MediatR;
+using Resend;
+using ComandaX.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ builder.Services.AddInfrastructure();
 builder.Services.AddGraphQLServices();
 
 builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddUserSecrets<Program>();
 
 // Register Pooled DbContextFactory for all database operations
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -69,9 +72,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = builder.Configuration["RESEND_APITOKEN"]!;
+});
+builder.Services.AddTransient<IResend, ResendClient>();
+
 var app = builder.Build();
 
-app.UseMiddleware<ComandaX.WebAPI.Middleware.ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

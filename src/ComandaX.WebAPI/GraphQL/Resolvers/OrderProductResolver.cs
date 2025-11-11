@@ -1,5 +1,4 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Extensions;
 using ComandaX.WebAPI.GraphQL.DataLoaders;
 
 namespace ComandaX.WebAPI.GraphQL.Resolvers;

@@ -1,7 +1,6 @@
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
-using ComandaX.Domain.Entities;
 using MediatR;
 
 namespace ComandaX.Application.Handlers.CustomerTabs.Queries.GetCustomerTabs;

@@ -28,6 +28,12 @@ namespace ComandaX.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -258,7 +264,7 @@ namespace ComandaX.Infrastructure.Migrations
             modelBuilder.Entity("ComandaX.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ComandaX.Domain.Entities.CustomerTab", "CustomerTab")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("CustomerTabId");
 
                     b.Navigation("CustomerTab");
@@ -290,6 +296,11 @@ namespace ComandaX.Infrastructure.Migrations
                         .HasForeignKey("ProductCategoryId");
 
                     b.Navigation("ProductCategory");
+                });
+
+            modelBuilder.Entity("ComandaX.Domain.Entities.CustomerTab", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ComandaX.Domain.Entities.Order", b =>

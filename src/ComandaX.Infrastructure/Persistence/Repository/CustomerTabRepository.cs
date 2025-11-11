@@ -23,6 +23,15 @@ public class CustomerTabRepository(AppDbContext _context) : ICustomerTabReposito
         return await _context.CustomerTabs.FirstOrDefaultAsync(t => t.Id == id);
     }
 
+    public async Task<CustomerTab?> GetByIdWithOrdersAsync(Guid id)
+    {
+        return await _context.CustomerTabs
+            .Include(t => t.Orders)
+            .ThenInclude(o => o.OrderProducts)
+            .ThenInclude(p => p.Product)
+            .FirstOrDefaultAsync(t => t.Id == id);
+    }
+
     public Task UpdateAsync(CustomerTab tab)
     {
         _context.CustomerTabs.Update(tab);

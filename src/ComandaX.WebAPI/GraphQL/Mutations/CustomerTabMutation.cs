@@ -1,5 +1,6 @@
 using ComandaX.Application.Handlers.CustomerTabs.Commands.CloseCustomerTab;
 using ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
+using ComandaX.Application.Handlers.CustomerTabs.Commands.SendCustomerTabEmail;
 using ComandaX.Domain.Entities;
 using MediatR;
 
@@ -17,5 +18,13 @@ public class CustomerTabMutation
     {
         await mediator.Send(command);
         return true;
+    }
+
+    public async Task<bool> SendCustomerTabEmail(
+    Guid customerTabId,
+    string email,
+    [Service] IMediator mediator)
+    {
+        return await mediator.Send(new SendCustomerTabEmailCommand(customerTabId, email));
     }
 }

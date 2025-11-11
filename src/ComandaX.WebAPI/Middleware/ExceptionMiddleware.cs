@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text.Json;
 using ComandaX.Application.Exceptions;
-using FluentValidation;
 
 namespace ComandaX.WebAPI.Middleware;
 

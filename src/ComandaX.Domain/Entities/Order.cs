@@ -11,11 +11,11 @@ public sealed class Order : BaseEntity
 
     public Order(Guid customerTabId)
     {
-        CustomerTabId = customerTabId;
+        SetCustomerTab(customerTabId);
     }
 
     public int Code { get; private set; }
-    public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.Created;
+    public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.Closed;
     public Guid? CustomerTabId { get; private set; }
     public CustomerTab? CustomerTab { get; set; }
     public ICollection<OrderProduct> OrderProducts { get; private set; } = [];
@@ -32,7 +32,6 @@ public sealed class Order : BaseEntity
             throw new ArgumentException("Product ID cannot be empty", nameof(productId));
 
         OrderProducts.Add(new(Id, productId, quantity, price));
-        EntityUpdated();
     }
 
     public void StartPreparation()
@@ -46,8 +45,8 @@ public sealed class Order : BaseEntity
         if (customerTabId == Guid.Empty)
             throw new ArgumentException("Customer tab ID cannot be empty", nameof(customerTabId));
 
+        Status = OrderStatusEnum.Created;
         CustomerTabId = customerTabId;
-        EntityUpdated();
     }
 
     public void CloseOrder()

@@ -9,8 +9,6 @@ namespace ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var order = new Order();
@@ -23,14 +21,14 @@ public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
         foreach (var item in request.Products)
         {
-            var product = await _unitOfWork.Products.GetByIdAsync(item.ProductId)
+            var product = await unitOfWork.Products.GetByIdAsync(item.ProductId)
                 ?? throw new RecordNotFoundException($"Product {item.ProductId} not found");
 
             order.AddProduct(item.ProductId, item.Quantity, product.Price);
         }
 
-        await _unitOfWork.Orders.AddAsync(order);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.Orders.AddAsync(order);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return order.AsDto();
     }

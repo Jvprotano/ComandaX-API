@@ -1,5 +1,4 @@
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Extensions;
 using ComandaX.Application.Handlers.Orders.Queries.GetOrderById;
 using ComandaX.Application.Handlers.Orders.Queries.GetOrders;
 using ComandaX.Domain.Enums;

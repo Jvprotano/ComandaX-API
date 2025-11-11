@@ -8,4 +8,5 @@ public interface ICustomerTabRepository
     Task<CustomerTab?> GetByIdAsync(Guid id);
     Task<IQueryable<CustomerTab>> GetAllAsync();
     Task UpdateAsync(CustomerTab tab);
+    Task<CustomerTab?> GetByIdWithOrdersAsync(Guid id);
 }

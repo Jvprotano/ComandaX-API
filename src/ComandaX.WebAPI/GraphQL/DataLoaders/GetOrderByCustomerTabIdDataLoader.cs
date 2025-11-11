@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ComandaX.Application.DTOs;
 using ComandaX.Application.Extensions;
-using ComandaX.Application.Interfaces;
-using ComandaX.Domain.Entities;
 using ComandaX.Infrastructure;
 
 namespace ComandaX.WebAPI.GraphQL.DataLoaders;

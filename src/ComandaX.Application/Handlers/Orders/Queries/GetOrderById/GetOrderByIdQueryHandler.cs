@@ -2,7 +2,6 @@ using ComandaX.Application.DTOs;
 using ComandaX.Application.Exceptions;
 using ComandaX.Application.Extensions;
 using ComandaX.Application.Interfaces;
-using ComandaX.Domain.Entities;
 using MediatR;
 
 namespace ComandaX.Application.Handlers.Orders.Queries.GetOrderById;
