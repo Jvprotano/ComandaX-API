@@ -13,7 +13,8 @@ public static class CustomerTabExtension
             customerTab.TableId,
             customerTab.Status,
             customerTab.Code,
-            customerTab.CreatedAt
+            customerTab.CreatedAt,
+            customerTab.UpdatedAt
         );
     }
 }

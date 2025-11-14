@@ -15,7 +15,8 @@ public sealed class CustomerTabDto
         Guid? tableId,
         CustomerTabStatusEnum status,
         int code,
-        DateTime createdAt)
+        DateTime createdAt,
+        DateTime? updatedAt)
     {
         Id = id;
         Name = name;
@@ -23,6 +24,7 @@ public sealed class CustomerTabDto
         Status = status;
         Code = code;
         CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
 
     public Guid Id { get; set; }
@@ -31,4 +33,5 @@ public sealed class CustomerTabDto
     public CustomerTabStatusEnum Status { get; set; }
     public int Code { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }
