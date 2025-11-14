@@ -10,17 +10,20 @@ public sealed class OrderDto
         int code,
         Guid? customerTabId,
         OrderStatusEnum status,
-        DateTime createdAt)
+        DateTime createdAt,
+        DateTime? updatedAt)
     {
         Id = id;
         Code = code;
         CustomerTabId = customerTabId;
         Status = status;
         CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
     }
     public Guid Id { get; set; }
     public int Code { get; set; }
     public Guid? CustomerTabId { get; set; }
     public OrderStatusEnum Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

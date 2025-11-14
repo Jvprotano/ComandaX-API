@@ -12,7 +12,8 @@ public static class OrderExtension
             order.Code,
             order.CustomerTabId,
             order.Status,
-            order.CreatedAt
+            order.CreatedAt,
+            order.UpdatedAt
         );
     }
 }
