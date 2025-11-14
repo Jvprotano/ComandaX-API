@@ -5,10 +5,10 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.Tables.Queries.GetTables;
 
-public class GetTablesQueryHandler(ITableRepository repository) : IRequestHandler<GetTablesQuery, IEnumerable<TableDto>>
+public class GetTablesQueryHandler(ITableRepository repository) : IRequestHandler<GetTablesQuery, IQueryable<TableDto>>
 {
 
-    public async Task<IEnumerable<TableDto>> Handle(GetTablesQuery request, CancellationToken cancellationToken)
+    public async Task<IQueryable<TableDto>> Handle(GetTablesQuery request, CancellationToken cancellationToken)
     {
         var tables = await repository.GetAllAsync();
 

@@ -9,6 +9,7 @@ namespace ComandaX.WebAPI.GraphQL.Queries;
 [ExtendObjectType("Query")]
 public class OrderQuery
 {
+    [UseSorting]
     public async Task<IList<OrderDto>> GetOrders(
         [Service] IMediator mediator,
         OrderStatusEnum? status)

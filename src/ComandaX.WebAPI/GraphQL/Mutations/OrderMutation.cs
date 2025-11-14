@@ -2,6 +2,7 @@ using ComandaX.Application.DTOs;
 using ComandaX.Application.Handlers.Orders.Commands.AddProductsToOrder;
 using ComandaX.Application.Handlers.Orders.Commands.CloseOrder;
 using ComandaX.Application.Handlers.Orders.Commands.CreateOrder;
+using ComandaX.Application.Handlers.Orders.Commands.DeleteOrder;
 using MediatR;
 
 namespace ComandaX.WebAPI.GraphQL.Mutations;
@@ -30,6 +31,14 @@ public class OrderMutation
     public async Task<bool> CloseOrderAsync(CloseOrderCommand command, [Service] IMediator mediator)
     {
         await mediator.Send(command);
+        return true;
+    }
+
+    public async Task<bool> DeleteOrderAsync(
+        [Service] IMediator mediator,
+        Guid id)
+    {
+        await mediator.Send(new DeleteOrderCommand(id));
         return true;
     }
 }

@@ -1,5 +1,6 @@
 using ComandaX.Application.Handlers.CustomerTabs.Commands.CloseCustomerTab;
 using ComandaX.Application.Handlers.CustomerTabs.Commands.CreateCustomerTab;
+using ComandaX.Application.Handlers.CustomerTabs.Commands.DeleteCustomerTab;
 using ComandaX.Application.Handlers.CustomerTabs.Commands.SendCustomerTabEmail;
 using ComandaX.Domain.Entities;
 using MediatR;
@@ -26,5 +27,13 @@ public class CustomerTabMutation
     [Service] IMediator mediator)
     {
         return await mediator.Send(new SendCustomerTabEmailCommand(customerTabId, email));
+    }
+
+    public async Task<bool> DeleteCustomerTabAsync(
+        [Service] IMediator mediator,
+        Guid id)
+    {
+        await mediator.Send(new DeleteCustomerTabCommand(id));
+        return true;
     }
 }

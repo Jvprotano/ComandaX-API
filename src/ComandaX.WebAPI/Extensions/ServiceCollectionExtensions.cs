@@ -43,7 +43,8 @@ public static class ServiceCollectionExtensions
             .AddResolver<OrderResolver>()
             .AddErrorFilter<ValidationErrorFilter>()
             .AddProjections()
-            .AddFiltering();
+            .AddFiltering()
+            .AddSorting();
 
         return services;
     }

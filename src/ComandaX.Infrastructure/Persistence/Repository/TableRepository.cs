@@ -12,9 +12,9 @@ public class TableRepository(AppDbContext _context) : ITableRepository
         return table;
     }
 
-    public async Task<IEnumerable<Table>> GetAllAsync()
+    public async Task<IQueryable<Table>> GetAllAsync()
     {
-        return await _context.Tables.ToListAsync();
+        return await Task.FromResult(_context.Tables);
     }
 
     public async Task<Table?> GetByIdAsync(Guid id)

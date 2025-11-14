@@ -11,6 +11,7 @@ namespace ComandaX.WebAPI.GraphQL.Queries;
 public class CustomerTabQuery
 {
     [UseProjection]
+    [UseSorting]
     public async Task<IQueryable<CustomerTabDto>> GetCustomerTabs(
         [Service] IMediator mediator,
         CustomerTabStatusEnum? status)

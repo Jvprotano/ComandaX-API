@@ -4,6 +4,26 @@ This document contains example GraphQL queries and mutations to test the Comanda
 
 ## Customer Tab Operations
 
+### Create Customer Tab
+
+Creates a new customer tab, optionally associating it with a table.
+
+**Mutation:**
+
+```graphql
+mutation {
+  createCustomerTab(
+    input: { name: "Table 5", tableId: "123e4567-e89b-12d3-a456-426614174000" }
+  ) {
+    id
+    name
+    code
+    status
+    tableId
+  }
+}
+```
+
 ### Close Customer Tab
 
 Closes a customer tab, closes all associated orders, and sets the table as available (free).
@@ -58,6 +78,140 @@ mutation {
   }
 }
 ```
+
+### Delete Customer Tab
+
+Soft deletes a customer tab. The customer tab will be marked as deleted but not removed from the database.
+
+**Mutation:**
+
+```graphql
+mutation {
+  deleteCustomerTabAsync(id: "123e4567-e89b-12d3-a456-426614174000")
+}
+```
+
+**Response:**
+
+```json
+{
+  "data": {
+    "deleteCustomerTabAsync": true
+  }
+}
+```
+
+**What happens when you delete a customer tab:**
+
+1. The customer tab's `DeletedAt` timestamp is set to the current UTC time
+2. The customer tab is soft deleted (not physically removed from the database)
+3. The customer tab will no longer appear in queries due to the global query filter
+4. Associated orders are NOT automatically deleted
+
+**Validation:**
+
+- Customer tab ID is required
+- Customer tab must exist
+
+**Error Example:**
+
+```json
+{
+  "errors": [
+    {
+      "message": "Record with Id 123e4567-e89b-12d3-a456-426614174000 not found.",
+      "extensions": {
+        "code": "NOT_FOUND"
+      }
+    }
+  ],
+  "data": {
+    "deleteCustomerTabAsync": null
+  }
+}
+```
+
+---
+
+## Order Operations
+
+### Create Order
+
+Creates a new order with products.
+
+**Mutation:**
+
+```graphql
+mutation {
+  createOrderAsync(
+    customerTabId: "123e4567-e89b-12d3-a456-426614174000"
+    products: [
+      { productId: "223e4567-e89b-12d3-a456-426614174001", quantity: 2 }
+      { productId: "323e4567-e89b-12d3-a456-426614174002", quantity: 1 }
+    ]
+  ) {
+    id
+    code
+    status
+    customerTabId
+    products {
+      productId
+      quantity
+      totalPrice
+      product {
+        name
+        price
+      }
+    }
+  }
+}
+```
+
+### Close Order
+
+Closes an order by setting its status to `Closed`.
+
+**Mutation:**
+
+```graphql
+mutation {
+  closeOrderAsync(command: { orderId: "123e4567-e89b-12d3-a456-426614174000" })
+}
+```
+
+### Delete Order
+
+Soft deletes an order. The order will be marked as deleted but not removed from the database.
+
+**Mutation:**
+
+```graphql
+mutation {
+  deleteOrderAsync(id: "123e4567-e89b-12d3-a456-426614174000")
+}
+```
+
+**Response:**
+
+```json
+{
+  "data": {
+    "deleteOrderAsync": true
+  }
+}
+```
+
+**What happens when you delete an order:**
+
+1. The order's `DeletedAt` timestamp is set to the current UTC time
+2. The order is soft deleted (not physically removed from the database)
+3. The order will no longer appear in queries due to the global query filter
+4. Associated order products are NOT automatically deleted (they have their own soft delete filter)
+
+**Validation:**
+
+- Order ID is required
+- Order must exist
 
 ---
 

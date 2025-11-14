@@ -8,6 +8,7 @@ namespace ComandaX.WebAPI.GraphQL.Queries;
 [ExtendObjectType("Query")]
 public class TableQuery
 {
+    [UseSorting]
     public async Task<IEnumerable<TableDto>> GetTables([Service] IMediator mediator)
     {
         return await mediator.Send(new GetTablesQuery());

@@ -6,7 +6,7 @@ public interface ITableRepository
 {
     Task<Table> AddAsync(Table table);
     Task<Table?> GetByIdAsync(Guid id);
-    Task<IEnumerable<Table>> GetAllAsync();
+    Task<IQueryable<Table>> GetAllAsync();
     Task UpdateAsync(Table table);
     Task<IList<Table>> GetByIdsAsync(IReadOnlyList<Guid> ids);
     Task SetAsBusyAsync(Guid id);

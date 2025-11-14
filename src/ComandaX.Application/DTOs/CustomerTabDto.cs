@@ -9,13 +9,20 @@ public sealed class CustomerTabDto
         Name = string.Empty;
     }
 
-    public CustomerTabDto(Guid id, string name, Guid? tableId, CustomerTabStatusEnum status, int code)
+    public CustomerTabDto(
+        Guid id,
+        string name,
+        Guid? tableId,
+        CustomerTabStatusEnum status,
+        int code,
+        DateTime createdAt)
     {
         Id = id;
         Name = name;
         TableId = tableId;
         Status = status;
         Code = code;
+        CreatedAt = createdAt;
     }
 
     public Guid Id { get; set; }
@@ -23,4 +30,5 @@ public sealed class CustomerTabDto
     public Guid? TableId { get; set; }
     public CustomerTabStatusEnum Status { get; set; }
     public int Code { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
