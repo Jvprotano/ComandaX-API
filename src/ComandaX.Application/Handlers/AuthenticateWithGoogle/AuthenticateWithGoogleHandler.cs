@@ -35,7 +35,8 @@ public class AuthenticateWithGoogleHandler(IUserRepository _userRepository, ICon
         var claims = new[]
         {
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim("tenant_id", user.TenantId.ToString())
         };
 
         var token = new JwtSecurityToken(

@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Application;
 using ComandaX.Application.Behaviors;
+using ComandaX.Application.Interfaces;
 using ComandaX.Infrastructure;
+using ComandaX.Infrastructure.Services;
 using ComandaX.WebAPI.Extensions;
 using FluentValidation;
 using MediatR;
@@ -19,17 +21,21 @@ builder.Services.AddGraphQLServices();
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddUserSecrets<Program>();
 
-// Register Pooled DbContextFactory for all database operations
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+// Register TenantService as scoped for per-request tenant context
+builder.Services.AddScoped<ITenantService, TenantService>();
 
-// Register scoped DbContext for migrations and seeding (created from factory)
-builder.Services.AddScoped(sp =>
+// Register DbContext with TenantService injection
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
-    var factory = sp.GetRequiredService<IDbContextFactory<AppDbContext>>();
-    return factory.CreateDbContext();
+    options.UseNpgsql(connectionString);
 });
+
+// Register DbContextFactory for scenarios that need it (like DataLoaders)
+builder.Services.AddDbContextFactory<AppDbContext>((serviceProvider, options) =>
+{
+    options.UseNpgsql(connectionString);
+}, ServiceLifetime.Scoped);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<AssemblyMarker>());
 builder.Services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
@@ -91,6 +97,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Extract tenant from JWT claims after authentication
+app.UseTenantMiddleware();
 
 app.MapGraphQL("/graphql");
 

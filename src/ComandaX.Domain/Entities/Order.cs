@@ -1,8 +1,9 @@
+using ComandaX.Domain.Common;
 using ComandaX.Domain.Enums;
 
 namespace ComandaX.Domain.Entities;
 
-public sealed class Order : BaseEntity
+public sealed class Order : BaseEntity, ITenantEntity
 {
     public Order()
     {
@@ -14,11 +15,19 @@ public sealed class Order : BaseEntity
         SetCustomerTab(customerTabId);
     }
 
+    public Guid TenantId { get; private set; }
     public int Code { get; private set; }
     public OrderStatusEnum Status { get; private set; } = OrderStatusEnum.Closed;
     public Guid? CustomerTabId { get; private set; }
     public CustomerTab? CustomerTab { get; set; }
     public ICollection<OrderProduct> OrderProducts { get; private set; } = [];
+
+    public void SetTenantId(Guid tenantId)
+    {
+        if (tenantId == Guid.Empty)
+            throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
+        TenantId = tenantId;
+    }
 
     public void AddProduct(Guid productId, int quantity, decimal price)
     {

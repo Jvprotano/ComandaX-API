@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     private ITableRepository? _tables;
     private IProductCategoryRepository? _productCategories;
     private IUserRepository? _users;
+    private ITenantRepository? _tenants;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -95,6 +96,18 @@ public class UnitOfWork : IUnitOfWork
         {
             _users ??= new UserRepository(_context);
             return _users;
+        }
+    }
+
+    /// <summary>
+    /// Gets the Tenant repository. Lazy-loaded on first access.
+    /// </summary>
+    public ITenantRepository Tenants
+    {
+        get
+        {
+            _tenants ??= new TenantRepository(_context);
+            return _tenants;
         }
     }
 

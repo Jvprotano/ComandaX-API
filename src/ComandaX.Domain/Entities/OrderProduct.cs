@@ -1,8 +1,9 @@
+using ComandaX.Domain.Common;
 using ComandaX.Domain.Enums;
 
 namespace ComandaX.Domain.Entities;
 
-public class OrderProduct : BaseEntity
+public class OrderProduct : BaseEntity, ITenantEntity
 {
     public OrderProduct()
     {
@@ -17,6 +18,8 @@ public class OrderProduct : BaseEntity
 
         TotalPrice = quantity * productPrice;
     }
+
+    public Guid TenantId { get; private set; }
     public Guid OrderId { get; private set; }
     public Guid ProductId { get; private set; }
     public decimal TotalPrice { get; private set; }
@@ -25,4 +28,11 @@ public class OrderProduct : BaseEntity
 
     public Order? Order { get; set; }
     public Product? Product { get; set; }
+
+    public void SetTenantId(Guid tenantId)
+    {
+        if (tenantId == Guid.Empty)
+            throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
+        TenantId = tenantId;
+    }
 }
