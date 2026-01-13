@@ -85,6 +85,9 @@ builder.Services.Configure<ResendClientOptions>(o =>
 });
 builder.Services.AddTransient<IResend, ResendClient>();
 
+// Add controllers for webhook endpoints
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -101,6 +104,10 @@ app.UseAuthorization();
 // Extract tenant from JWT claims after authentication
 app.UseTenantMiddleware();
 
+// Check subscription status and enforce read-only for expired subscriptions
+app.UseSubscriptionMiddleware();
+
+app.MapControllers();
 app.MapGraphQL("/graphql");
 
 app.MapGet("/", () => "API running ✅");

@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ComandaX.Application.DTOs;
-using ComandaX.Application.Exceptions;
 using ComandaX.Application.Interfaces;
 using ComandaX.Domain.Entities;
 using Google.Apis.Auth;
@@ -12,15 +11,34 @@ using MediatR;
 
 namespace ComandaX.Application.Handlers.AuthenticateWithGoogle;
 
-public class AuthenticateWithGoogleHandler(IUserRepository _userRepository, IConfiguration _config) : IRequestHandler<AuthenticateWithGoogleCommand, AuthResultDto>
+public class AuthenticateWithGoogleHandler(IUnitOfWork _unitOfWork, IConfiguration _config) : IRequestHandler<AuthenticateWithGoogleCommand, AuthResultDto>
 {
     public async Task<AuthResultDto> Handle(AuthenticateWithGoogleCommand request, CancellationToken cancellationToken)
     {
         var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken);
         var email = payload.Email;
 
-        var user = await _userRepository.GetByEmailAsync(email)
-         ?? throw new UserNotAuthorizedException(email);
+        // Try to find an existing user by email
+        var user = await _unitOfWork.Users.GetByEmailAsync(email);
+
+        if (user == null)
+        {
+            // User not registered yet: create a new tenant, user and free long-lived subscription
+            var tenantName = !string.IsNullOrWhiteSpace(payload.Name) ? payload.Name : email;
+
+            var tenant = new Tenant(tenantName);
+            await _unitOfWork.Tenants.AddAsync(tenant);
+
+            // For now the product is free, so create a long-lived free subscription
+            var subscription = Subscription.CreateFreeForOneYear(tenant.Id);
+            await _unitOfWork.Subscriptions.AddAsync(subscription);
+
+            // Register the user as the tenant admin
+            user = new User(email, "Admin", tenant.Id);
+            await _unitOfWork.Users.AddAsync(user);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
 
         var jwtToken = GenerateJwt(user);
 

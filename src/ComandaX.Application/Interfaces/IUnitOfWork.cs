@@ -42,6 +42,11 @@ public interface IUnitOfWork : IDisposable
     ITenantRepository Tenants { get; }
 
     /// <summary>
+    /// Gets the Subscription repository.
+    /// </summary>
+    ISubscriptionRepository Subscriptions { get; }
+
+    /// <summary>
     /// Saves all changes made in this unit of work to the database.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>

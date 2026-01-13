@@ -21,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
     private IProductCategoryRepository? _productCategories;
     private IUserRepository? _users;
     private ITenantRepository? _tenants;
+    private ISubscriptionRepository? _subscriptions;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -108,6 +109,18 @@ public class UnitOfWork : IUnitOfWork
         {
             _tenants ??= new TenantRepository(_context);
             return _tenants;
+        }
+    }
+
+    /// <summary>
+    /// Gets the Subscription repository. Lazy-loaded on first access.
+    /// </summary>
+    public ISubscriptionRepository Subscriptions
+    {
+        get
+        {
+            _subscriptions ??= new SubscriptionRepository(_context);
+            return _subscriptions;
         }
     }
 

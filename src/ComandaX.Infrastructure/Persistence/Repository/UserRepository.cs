@@ -10,4 +10,10 @@ public class UserRepository(AppDbContext _context) : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task<User> AddAsync(User user)
+    {
+        await _context.Users.AddAsync(user);
+        return user;
+    }
 }

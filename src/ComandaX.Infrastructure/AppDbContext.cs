@@ -26,6 +26,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
+    public DbSet<Subscription> Subscriptions => Set<Subscription>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,6 +41,18 @@ public class AppDbContext : DbContext
 
         // Configure Tenant entity (no tenant filter - tenants are root entities)
         modelBuilder.Entity<Tenant>().HasQueryFilter(t => t.DeletedAt == null);
+
+        // Configure Subscription entity (no tenant filter - subscriptions are queried by TenantId explicitly)
+        modelBuilder.Entity<Subscription>()
+            .HasQueryFilter(s => s.DeletedAt == null);
+        modelBuilder.Entity<Subscription>()
+            .HasOne(s => s.Tenant)
+            .WithOne()
+            .HasForeignKey<Subscription>(s => s.TenantId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Subscription>()
+            .HasIndex(s => s.TenantId)
+            .IsUnique();
 
         // Configure User-Tenant relationship
         modelBuilder.Entity<User>()

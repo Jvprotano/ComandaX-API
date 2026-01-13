@@ -22,6 +22,14 @@ public class SeedData
             context.Tenants.Add(defaultTenant);
             await context.SaveChangesAsync();
         }
+
+        // Ensure default tenant has a subscription (trial)
+        if (!await context.Subscriptions.AnyAsync(s => s.TenantId == DefaultTenantId))
+        {
+            var subscription = new Subscription(DefaultTenantId);
+            context.Subscriptions.Add(subscription);
+            await context.SaveChangesAsync();
+        }
     }
 
     public static async Task SeedAdminsAsync(AppDbContext context)

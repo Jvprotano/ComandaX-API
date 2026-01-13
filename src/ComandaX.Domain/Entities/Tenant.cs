@@ -35,6 +35,11 @@ public class Tenant : BaseEntity
     /// </summary>
     public bool IsActive { get; private set; } = true;
 
+    /// <summary>
+    /// Navigation property to the tenant's subscription.
+    /// </summary>
+    public Subscription? Subscription { get; set; }
+
     public void UpdateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

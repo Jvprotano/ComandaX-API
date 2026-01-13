@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ComandaX.Application.Interfaces;
 using ComandaX.Infrastructure.Persistence;
 using ComandaX.Infrastructure.Persistence.Repository;
+using ComandaX.Infrastructure.Services;
 
 namespace ComandaX.Infrastructure;
 
@@ -19,6 +20,13 @@ public static class DependencyInjection
         services.AddScoped<ICustomerTabRepository, CustomerTabRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
+        // Register AbacatePay service with HttpClient
+        services.AddHttpClient<IAbacatePayService, AbacatePayService>();
+
+        // Register Subscription Notification Service
+        services.AddScoped<ISubscriptionNotificationService, SubscriptionNotificationService>();
 
         return services;
     }
