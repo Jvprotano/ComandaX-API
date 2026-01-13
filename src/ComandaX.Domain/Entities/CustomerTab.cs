@@ -28,6 +28,7 @@ public class CustomerTab : BaseEntity, ITenantEntity
     {
         if (tenantId == Guid.Empty)
             throw new ArgumentException("Tenant ID cannot be empty", nameof(tenantId));
+
         TenantId = tenantId;
     }
 

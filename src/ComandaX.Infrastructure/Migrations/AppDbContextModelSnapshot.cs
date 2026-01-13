@@ -223,6 +223,56 @@ namespace ComandaX.Infrastructure.Migrations
                     b.ToTable("ProductCategories");
                 });
 
+            modelBuilder.Entity("ComandaX.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AbacatePayBillingId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AbacatePayCustomerId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("PriceInCentavos")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TenantId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId")
+                        .IsUnique();
+
+                    b.HasIndex("TenantId1")
+                        .IsUnique();
+
+                    b.ToTable("Subscriptions");
+                });
+
             modelBuilder.Entity("ComandaX.Domain.Entities.Table", b =>
                 {
                     b.Property<Guid>("Id")
@@ -363,6 +413,21 @@ namespace ComandaX.Infrastructure.Migrations
                     b.Navigation("ProductCategory");
                 });
 
+            modelBuilder.Entity("ComandaX.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("ComandaX.Domain.Entities.Tenant", "Tenant")
+                        .WithOne()
+                        .HasForeignKey("ComandaX.Domain.Entities.Subscription", "TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ComandaX.Domain.Entities.Tenant", null)
+                        .WithOne("Subscription")
+                        .HasForeignKey("ComandaX.Domain.Entities.Subscription", "TenantId1");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("ComandaX.Domain.Entities.User", b =>
                 {
                     b.HasOne("ComandaX.Domain.Entities.Tenant", "Tenant")
@@ -387,6 +452,11 @@ namespace ComandaX.Infrastructure.Migrations
             modelBuilder.Entity("ComandaX.Domain.Entities.ProductCategory", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ComandaX.Domain.Entities.Tenant", b =>
+                {
+                    b.Navigation("Subscription");
                 });
 #pragma warning restore 612, 618
         }

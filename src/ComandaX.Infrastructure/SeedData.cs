@@ -40,9 +40,7 @@ public class SeedData
         var admins = new[]
         {
             "jvprotano@gmail.com",
-            "vhprotano@gmail.com",
-            "protanosoftware@gmail.com",
-            "mateuskalore12@gmail.com"
+            "vhprotano@gmail.com"
         };
 
         foreach (var email in admins)

@@ -6,15 +6,60 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ComandaX.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMultiTenancy : Migration
+    public partial class SubscriptionsTenant : Migration
     {
-        // Default tenant ID for migration - must match SeedData.DefaultTenantId
-        private static readonly Guid DefaultTenantId = Guid.Parse("00000000-0000-0000-0000-000000000001");
-
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Create Tenants table first (before adding FKs)
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "Users",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "Tables",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "Products",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "ProductCategories",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "Orders",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "OrderProducts",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TenantId",
+                table: "CustomerTabs",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
             migrationBuilder.CreateTable(
                 name: "Tenants",
                 columns: table => new
@@ -32,61 +77,38 @@ namespace ComandaX.Infrastructure.Migrations
                     table.PrimaryKey("PK_Tenants", x => x.Id);
                 });
 
-            // Insert default tenant for existing data
-            migrationBuilder.Sql($@"
-                INSERT INTO ""Tenants"" (""Id"", ""Name"", ""Description"", ""IsActive"", ""CreatedAt"", ""UpdatedAt"", ""DeletedAt"")
-                VALUES ('{DefaultTenantId}', 'Default Tenant', 'Default tenant for existing data', true, NOW(), NOW(), NULL)
-                ON CONFLICT (""Id"") DO NOTHING;
-            ");
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "Users",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "Tables",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "Products",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "ProductCategories",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "Orders",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "OrderProducts",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "TenantId",
-                table: "CustomerTabs",
-                type: "uuid",
-                nullable: false,
-                defaultValue: DefaultTenantId);
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AbacatePayBillingId = table.Column<string>(type: "text", nullable: true),
+                    AbacatePayCustomerId = table.Column<string>(type: "text", nullable: true),
+                    PriceInCentavos = table.Column<int>(type: "integer", nullable: true),
+                    TenantId1 = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_Tenants_TenantId1",
+                        column: x => x.TenantId1,
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_TenantId",
@@ -123,6 +145,18 @@ namespace ComandaX.Infrastructure.Migrations
                 table: "CustomerTabs",
                 column: "TenantId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_TenantId",
+                table: "Subscriptions",
+                column: "TenantId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_TenantId1",
+                table: "Subscriptions",
+                column: "TenantId1",
+                unique: true);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Users_Tenants_TenantId",
                 table: "Users",
@@ -138,6 +172,9 @@ namespace ComandaX.Infrastructure.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Users_Tenants_TenantId",
                 table: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
 
             migrationBuilder.DropTable(
                 name: "Tenants");

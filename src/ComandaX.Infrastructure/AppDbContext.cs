@@ -71,23 +71,44 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>().HasIndex(u => u.TenantId);
 
         // Soft delete and tenant query filters
-        // Each entity is filtered by both DeletedAt and TenantId
-        var tenantId = _tenantService?.GetCurrentTenantId();
-
+        // Each entity is filtered by both DeletedAt and the current TenantId resolved per request
+        // NOTE: We intentionally access _tenantService inside the filter so it can read the
+        // current tenant for each call, instead of capturing a fixed value at model creation time.
         modelBuilder.Entity<Product>()
-            .HasQueryFilter(p => p.DeletedAt == null && (tenantId == null || p.TenantId == tenantId));
+            .HasQueryFilter(p =>
+                p.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 p.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<Table>()
-            .HasQueryFilter(t => t.DeletedAt == null && (tenantId == null || t.TenantId == tenantId));
+            .HasQueryFilter(t =>
+                t.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 t.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<ProductCategory>()
-            .HasQueryFilter(pc => pc.DeletedAt == null && (tenantId == null || pc.TenantId == tenantId));
+            .HasQueryFilter(pc =>
+                pc.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 pc.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<Order>()
-            .HasQueryFilter(o => o.DeletedAt == null && (tenantId == null || o.TenantId == tenantId));
+            .HasQueryFilter(o =>
+                o.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 o.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<CustomerTab>()
-            .HasQueryFilter(ct => ct.DeletedAt == null && (tenantId == null || ct.TenantId == tenantId));
+            .HasQueryFilter(ct =>
+                ct.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 ct.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<OrderProduct>()
-            .HasQueryFilter(op => op.DeletedAt == null && (tenantId == null || op.TenantId == tenantId));
+            .HasQueryFilter(op =>
+                op.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 op.TenantId == _tenantService.GetCurrentTenantId()));
         modelBuilder.Entity<User>()
-            .HasQueryFilter(u => u.DeletedAt == null && (tenantId == null || u.TenantId == tenantId));
+            .HasQueryFilter(u =>
+                u.DeletedAt == null &&
+                (_tenantService == null || _tenantService.GetCurrentTenantId() == null ||
+                 u.TenantId == _tenantService.GetCurrentTenantId()));
 
         base.OnModelCreating(modelBuilder);
     }
