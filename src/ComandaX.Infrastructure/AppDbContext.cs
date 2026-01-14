@@ -9,11 +9,7 @@ public class AppDbContext : DbContext
 {
     private readonly ITenantService? _tenantService;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options, ITenantService tenantService) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, ITenantService? tenantService = null) : base(options)
     {
         _tenantService = tenantService;
     }

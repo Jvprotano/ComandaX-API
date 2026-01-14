@@ -14,7 +14,7 @@ public class ProductMutation
         string name,
         decimal price,
         bool? needPreparation,
-        Guid? productCategoryId)
+        Optional<Guid?> productCategoryId)
     {
         return await mediator.Send(new CreateProductCommand(name, price, productCategoryId, needPreparation ?? false));
     }
