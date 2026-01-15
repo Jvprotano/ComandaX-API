@@ -8,10 +8,10 @@ using ComandaX.Application.Interfaces;
 using ComandaX.Infrastructure;
 using ComandaX.Infrastructure.Services;
 using ComandaX.WebAPI.Extensions;
+using ComandaX.WebAPI.Middleware;
 using FluentValidation;
 using MediatR;
 using Resend;
-using ComandaX.WebAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,11 +117,12 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
 
-    await SeedData.SeedAdminsAsync(context);
-
     bool isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
     if (isDevelopment)
+    {
+        await SeedData.SeedAdminsAsync(context);
         await SeedData.GenerateDevTestData(context);
+    }
 }
 
 app.Run();
