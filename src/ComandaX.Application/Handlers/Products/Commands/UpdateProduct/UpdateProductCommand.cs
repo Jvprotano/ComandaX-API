@@ -9,4 +9,5 @@ public record UpdateProductCommand(
     string? Name,
     decimal? Price,
     bool? NeedPreparation,
+    bool? IsPricePerKg,
     Optional<Guid?> ProductCategoryId) : IRequest<Unit>;

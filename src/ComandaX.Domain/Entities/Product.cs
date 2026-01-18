@@ -66,4 +66,10 @@ public sealed class Product : BaseEntity, ITenantEntity
         ProductCategoryId = productCategoryId;
         EntityUpdated();
     }
+
+    public void SetIsPricePerKg(bool isPricePerKg)
+    {
+        IsPricePerKg = isPricePerKg;
+        EntityUpdated();
+    }
 }

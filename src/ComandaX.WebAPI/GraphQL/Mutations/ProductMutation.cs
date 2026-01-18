@@ -31,9 +31,10 @@ public class ProductMutation
         string? name,
         decimal? price,
         bool? needPreparation,
+        bool? isPricePerKg,
         Optional<Guid?> productCategoryId)
     {
-        await mediator.Send(new UpdateProductCommand(id, name, price, needPreparation, productCategoryId));
+        await mediator.Send(new UpdateProductCommand(id, name, price, needPreparation, isPricePerKg, productCategoryId));
         return true;
     }
 

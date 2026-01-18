@@ -25,6 +25,9 @@ public class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         if (request.NeedPreparation != null)
             product.SetNeedPreparation(request.NeedPreparation.Value);
 
+        if (request.IsPricePerKg != null)
+            product.SetIsPricePerKg(request.IsPricePerKg.Value);
+
         await _unitOfWork.Products.UpdateAsync(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
