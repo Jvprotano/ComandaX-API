@@ -4,13 +4,21 @@ public sealed class ProductDto
 {
     public ProductDto() { }
 
-    public ProductDto(Guid id, string name, decimal price, int code, bool needPreparation, Guid? productCategoryId)
+    public ProductDto(
+        Guid id,
+        string name,
+        decimal price,
+        int code,
+        bool needPreparation,
+        bool pricePerKg,
+        Guid? productCategoryId)
     {
         Id = id;
         Name = name;
         Price = price;
         Code = code;
         NeedPreparation = needPreparation;
+        IsPricePerKg = pricePerKg;
         ProductCategoryId = productCategoryId;
     }
 
@@ -21,4 +29,5 @@ public sealed class ProductDto
     public bool NeedPreparation { get; set; }
     public Guid? ProductCategoryId { get; set; }
     public ProductCategoryDto? ProductCategory { get; set; }
+    public bool IsPricePerKg { get; set; }
 }

@@ -18,7 +18,7 @@ public class AddProductsToOrderCommandHandler(IUnitOfWork unitOfWork) : IRequest
             var product = await _unitOfWork.Products.GetByIdAsync(productId)
                 ?? throw new RecordNotFoundException($"Product with Id {productId} not found.");
 
-            order.OrderProducts.Add(new Domain.Entities.OrderProduct(order.Id, product.Id, 1, product.Price));
+            order.OrderProducts.Add(new Domain.Entities.OrderProduct(order.Id, product, 1));
         }
 
         await _unitOfWork.Orders.UpdateAsync(order);

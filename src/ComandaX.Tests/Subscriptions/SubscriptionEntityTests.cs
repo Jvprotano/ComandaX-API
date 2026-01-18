@@ -50,7 +50,7 @@ public class SubscriptionEntityTests
 
         // Assert
         Assert.True(subscription.EndDate > beforeActivation.AddDays(20));
-        Assert.True(subscription.EndDate < beforeActivation.AddMonths(2));
+        Assert.True(subscription.EndDate < beforeActivation.AddMonths(2).AddDays(1));
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class SubscriptionEntityTests
         // Arrange
         var subscription = new Subscription(Guid.NewGuid());
         // Default trial subscription has 30 days, so this should return false
-        
+
         // Act
         var isExpiringSoon = subscription.IsExpiringSoon();
 

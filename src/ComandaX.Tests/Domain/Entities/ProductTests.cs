@@ -1,4 +1,5 @@
 using ComandaX.Domain.Entities;
+using ComandaX.Tests.Helpers.Builders;
 using Xunit;
 
 namespace ComandaX.Tests.Domain.Entities;
@@ -9,13 +10,16 @@ public class ProductTests
     public void Constructor_WithNameAndPrice_CreatesProduct()
     {
         // Arrange & Act
-        var product = new Product("Test Product", 10.99m);
+        const decimal PRICE = 10.99m;
+        const string NAME = "Test Product";
+
+        var product = ProductBuilder.New()
+        .WithName(NAME)
+        .WithPrice(PRICE).Build();
 
         // Assert
-        Assert.Equal("Test Product", product.Name);
-        Assert.Equal(10.99m, product.Price);
-        Assert.False(product.NeedPreparation);
-        Assert.Null(product.ProductCategoryId);
+        Assert.Equal(NAME, product.Name);
+        Assert.Equal(PRICE, product.Price);
     }
 
     [Fact]
@@ -23,34 +27,47 @@ public class ProductTests
     {
         // Arrange
         var categoryId = Guid.NewGuid();
+        const decimal PRICE = 10.99m;
+        const bool NEED_PREPARATION = true;
+        const string NAME = "Test Product";
 
         // Act
-        var product = new Product("Test Product", 10.99m, categoryId);
+        var product = ProductBuilder
+        .New()
+        .WithName(NAME)
+        .WithPrice(PRICE)
+        .WithNeedPreparation(NEED_PREPARATION)
+        .WithProductCategoryId(categoryId)
+        .WithPricePerKg(true)
+        .Build();
 
         // Assert
-        Assert.Equal("Test Product", product.Name);
-        Assert.Equal(10.99m, product.Price);
+        Assert.Equal(NAME, product.Name);
+        Assert.Equal(PRICE, product.Price);
+        Assert.Equal(NEED_PREPARATION, product.NeedPreparation);
         Assert.Equal(categoryId, product.ProductCategoryId);
+        Assert.True(product.IsPricePerKg);
     }
 
     [Fact]
     public void SetName_WithValidName_UpdatesName()
     {
         // Arrange
-        var product = new Product("Original Name", 10.99m);
+        const string NEW_NAME = "New Name";
+        var product = ProductBuilder.New().Build();
 
         // Act
-        product.SetName("New Name");
+        product.SetName(NEW_NAME);
 
         // Assert
-        Assert.Equal("New Name", product.Name);
+        Assert.Equal(NEW_NAME, product.Name);
     }
 
     [Fact]
     public void SetName_WithEmptyName_ThrowsArgumentException()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = ProductBuilder.New().Build();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => product.SetName(""));
@@ -60,7 +77,7 @@ public class ProductTests
     public void SetName_WithWhitespaceName_ThrowsArgumentException()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = ProductBuilder.New().Build();
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => product.SetName("   "));
@@ -70,7 +87,7 @@ public class ProductTests
     public void SetPrice_WithValidPrice_UpdatesPrice()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = ProductBuilder.New().Build();
 
         // Act
         product.SetPrice(15.99m);
@@ -83,7 +100,7 @@ public class ProductTests
     public void SetPrice_WithZeroPrice_ThrowsArgumentException()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = new Product("Test Product", 10.99m, false);
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => product.SetPrice(0m));
@@ -93,7 +110,7 @@ public class ProductTests
     public void SetPrice_WithNegativePrice_ThrowsArgumentException()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = new Product("Test Product", 10.99m, false);
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => product.SetPrice(-5m));
@@ -103,7 +120,8 @@ public class ProductTests
     public void SetNeedPreparation_WithTrue_UpdatesNeedPreparation()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = ProductBuilder.New().WithNeedPreparation(false).Build();
+
         Assert.False(product.NeedPreparation);
 
         // Act
@@ -117,7 +135,7 @@ public class ProductTests
     public void SetNeedPreparation_WithFalse_UpdatesNeedPreparation()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = new Product("Test Product", 10.99m, false);
         product.SetNeedPreparation(true);
         Assert.True(product.NeedPreparation);
 
@@ -132,7 +150,7 @@ public class ProductTests
     public void SetProductCategory_WithValidCategoryId_UpdatesCategory()
     {
         // Arrange
-        var product = new Product("Test Product", 10.99m);
+        var product = new Product("Test Product", 10.99m, false);
         var categoryId = Guid.NewGuid();
 
         // Act
@@ -147,7 +165,7 @@ public class ProductTests
     {
         // Arrange
         var categoryId = Guid.NewGuid();
-        var product = new Product("Test Product", 10.99m, categoryId);
+        var product = new Product("Test Product", 10.99m, false, categoryId);
         Assert.Equal(categoryId, product.ProductCategoryId);
 
         // Act

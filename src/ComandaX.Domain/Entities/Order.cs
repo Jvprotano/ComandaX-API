@@ -29,18 +29,18 @@ public sealed class Order : BaseEntity, ITenantEntity
         TenantId = tenantId;
     }
 
-    public void AddProduct(Guid productId, int quantity, decimal price)
+    public void AddProduct(Product product, decimal quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be greater than zero", nameof(quantity));
 
-        if (price <= 0)
-            throw new ArgumentException("Price must be greater than zero", nameof(price));
+        if (product.Price <= 0)
+            throw new ArgumentException("Price must be greater than zero", nameof(product.Price));
 
-        if (productId == Guid.Empty)
-            throw new ArgumentException("Product ID cannot be empty", nameof(productId));
+        if (product.Id == Guid.Empty)
+            throw new ArgumentException("Product ID cannot be empty", nameof(product.Id));
 
-        OrderProducts.Add(new(Id, productId, quantity, price));
+        OrderProducts.Add(new(Id, product, quantity));
     }
 
     public void StartPreparation()

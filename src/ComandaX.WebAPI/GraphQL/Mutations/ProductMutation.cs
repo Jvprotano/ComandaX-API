@@ -14,9 +14,15 @@ public class ProductMutation
         string name,
         decimal price,
         bool? needPreparation,
-        Optional<Guid?> productCategoryId)
+        Optional<Guid?> productCategoryId,
+        bool isPricePerKg = false)
     {
-        return await mediator.Send(new CreateProductCommand(name, price, productCategoryId, needPreparation ?? false));
+        return await mediator.Send(
+            new CreateProductCommand(
+                name,
+                price,
+                productCategoryId,
+                needPreparation ?? false, isPricePerKg));
     }
 
     public async Task<bool> UpdateProductAsync(

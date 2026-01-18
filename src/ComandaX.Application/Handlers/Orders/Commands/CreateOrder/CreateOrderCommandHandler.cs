@@ -24,7 +24,7 @@ public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
             var product = await unitOfWork.Products.GetByIdAsync(item.ProductId)
                 ?? throw new RecordNotFoundException($"Product {item.ProductId} not found");
 
-            order.AddProduct(item.ProductId, item.Quantity, product.Price);
+            order.AddProduct(product, item.Quantity);
         }
 
         await unitOfWork.Orders.AddAsync(order);

@@ -7,4 +7,5 @@ public sealed record CreateProductCommand(
     string Name,
     decimal Price,
     Guid? ProductCategoryId,
-    bool NeedPreparation = false) : IRequest<ProductDto>;
+    bool NeedPreparation = false,
+    bool IsPricePerKg = false) : IRequest<ProductDto>;

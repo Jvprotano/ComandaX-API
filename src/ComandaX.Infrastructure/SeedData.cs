@@ -71,7 +71,7 @@ public class SeedData
         await context.SaveChangesAsync();
 
         var products = new Faker<Product>()
-            .CustomInstantiator(f => new Product(f.Commerce.ProductName(), f.Random.Decimal(1, 100), f.Random.ListItem(productCategories).Id))
+            .CustomInstantiator(f => new Product(f.Commerce.ProductName(), f.Random.Decimal(1, 100), false, f.Random.ListItem(productCategories).Id))
             .FinishWith((f, p) => p.SetTenantId(DefaultTenantId))
             .Generate(5);
         await context.Products.AddRangeAsync(products);
@@ -113,7 +113,7 @@ public class SeedData
         var orderProducts = new Faker<OrderProduct>()
             .CustomInstantiator(f =>
             {
-                var orderProduct = new OrderProduct(f.Random.ListItem(orders).Id, f.Random.ListItem(products).Id, f.Random.Int(1, 5), f.Random.Decimal(1, 100));
+                var orderProduct = new OrderProduct(f.Random.ListItem(orders).Id, f.Random.ListItem(products), f.Random.Decimal(1, 5));
                 orderProduct.SetTenantId(DefaultTenantId);
                 return orderProduct;
             })

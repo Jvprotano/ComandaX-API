@@ -13,6 +13,7 @@ public static class ProductExtension
             product.Price.AsMoney(),
             product.Code,
             product.NeedPreparation,
+            product.IsPricePerKg,
             product.ProductCategoryId);
     }
 

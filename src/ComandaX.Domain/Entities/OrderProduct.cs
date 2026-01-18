@@ -10,20 +10,24 @@ public class OrderProduct : BaseEntity, ITenantEntity
 
     }
 
-    public OrderProduct(Guid orderId, Guid productId, int quantity, decimal productPrice)
+    public OrderProduct(Guid orderId, Product product, decimal quantity)
     {
         OrderId = orderId;
-        ProductId = productId;
-        Quantity = quantity;
+        ProductId = product.Id;
 
-        TotalPrice = quantity * productPrice;
+        if (!product.IsPricePerKg)
+            Quantity = (int)quantity;
+        else
+            Quantity = quantity;
+
+        TotalPrice = quantity * product.Price;
     }
 
     public Guid TenantId { get; private set; }
     public Guid OrderId { get; private set; }
     public Guid ProductId { get; private set; }
     public decimal TotalPrice { get; private set; }
-    public int Quantity { get; private set; }
+    public decimal Quantity { get; private set; }
     public OrderProductEnum? Status { get; private set; }
 
     public Order? Order { get; set; }

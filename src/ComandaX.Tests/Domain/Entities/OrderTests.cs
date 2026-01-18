@@ -1,5 +1,6 @@
 using ComandaX.Domain.Entities;
 using ComandaX.Domain.Enums;
+using ComandaX.Tests.Helpers.Builders;
 using Xunit;
 
 namespace ComandaX.Tests.Domain.Entities;
@@ -65,18 +66,22 @@ public class OrderTests
     public void AddProduct_WithValidParameters_AddsProductToOrder()
     {
         // Arrange
+        const decimal PRODUCT_PRICE = 10.99m;
+        const decimal QUANTITY = 2m;
+        decimal expectedTotalPrice = PRODUCT_PRICE * QUANTITY;
+
         var order = new Order(Guid.NewGuid());
-        var productId = Guid.NewGuid();
+        var product = ProductBuilder.New().WithPrice(PRODUCT_PRICE).Build();
 
         // Act
-        order.AddProduct(productId, 2, 10.99m);
+        order.AddProduct(product, QUANTITY);
 
         // Assert
         Assert.Single(order.OrderProducts);
         var orderProduct = order.OrderProducts.First();
-        Assert.Equal(productId, orderProduct.ProductId);
-        Assert.Equal(2, orderProduct.Quantity);
-        Assert.Equal(21.98m, orderProduct.TotalPrice);
+        Assert.Equal(product.Id, orderProduct.ProductId);
+        Assert.Equal(QUANTITY, orderProduct.Quantity);
+        Assert.Equal(expectedTotalPrice, orderProduct.TotalPrice);
     }
 
     [Fact]
@@ -84,10 +89,11 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
-        var productId = Guid.NewGuid();
+        var product = ProductBuilder.New().Build();
+
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => order.AddProduct(productId, 0, 10.99m));
+        Assert.Throws<ArgumentException>(() => order.AddProduct(product, 0));
     }
 
     [Fact]
@@ -95,10 +101,10 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
-        var productId = Guid.NewGuid();
+        var product = ProductBuilder.New().Build();
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => order.AddProduct(productId, -1, 10.99m));
+        Assert.Throws<ArgumentException>(() => order.AddProduct(product, -1));
     }
 
     [Fact]
@@ -106,10 +112,10 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
-        var productId = Guid.NewGuid();
+        var product = ProductBuilder.New().WithPrice(0m).Build();
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => order.AddProduct(productId, 1, 0m));
+        Assert.Throws<ArgumentException>(() => order.AddProduct(product, 1));
     }
 
     [Fact]
@@ -117,10 +123,10 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
-        var productId = Guid.NewGuid();
+        var product = ProductBuilder.New().WithPrice(-10m).Build();
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => order.AddProduct(productId, 1, -5m));
+        Assert.Throws<ArgumentException>(() => order.AddProduct(product, 1));
     }
 
     [Fact]
@@ -128,9 +134,10 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
+        var product = ProductBuilder.New().WithId(Guid.Empty).Build();
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => order.AddProduct(Guid.Empty, 1, 10.99m));
+        Assert.Throws<ArgumentException>(() => order.AddProduct(product, 10.99m));
     }
 
     [Fact]
@@ -138,12 +145,12 @@ public class OrderTests
     {
         // Arrange
         var order = new Order(Guid.NewGuid());
-        var productId1 = Guid.NewGuid();
-        var productId2 = Guid.NewGuid();
+
+        var products = ProductBuilder.New().BuildList(2);
 
         // Act
-        order.AddProduct(productId1, 2, 10.99m);
-        order.AddProduct(productId2, 1, 5.50m);
+        order.AddProduct(products[0], 10.99m);
+        order.AddProduct(products[1], 5.50m);
 
         // Assert
         Assert.Equal(2, order.OrderProducts.Count);

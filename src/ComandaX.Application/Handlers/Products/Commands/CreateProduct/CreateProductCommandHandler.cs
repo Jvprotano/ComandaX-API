@@ -12,7 +12,7 @@ public class CreateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var productRequest = new Product(request.Name, request.Price);
+        var productRequest = new Product(request.Name, request.Price, request.IsPricePerKg);
 
         if (request.NeedPreparation)
             productRequest.SetNeedPreparation(request.NeedPreparation);
