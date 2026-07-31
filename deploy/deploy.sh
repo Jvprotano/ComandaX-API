@@ -4,12 +4,12 @@
 #
 # Diferente do ChaLive, o ComandaX são DOIS repositórios git (API e front)
 # clonados lado a lado. Este script mora dentro do repo da API e orquestra
-# os dois: docker-compose.prod.yml (também neste repo) builda a API a partir
+# os dois: docker-compose.yml (também neste repo) builda a API a partir
 # daqui e o front a partir de "../comandax-front".
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-export COMPOSE_FILE=docker-compose.prod.yml
+export COMPOSE_FILE=docker-compose.yml
 
 [ -f .env ] || { echo "ERRO: .env não encontrado. Copie de .env.example." >&2; exit 1; }
 

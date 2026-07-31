@@ -4,7 +4,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
-export COMPOSE_FILE=docker-compose.prod.yml
+export COMPOSE_FILE=docker-compose.yml
 
 BACKUP_DIR="${1:-./backups}"
 mkdir -p "$BACKUP_DIR"

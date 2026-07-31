@@ -6,7 +6,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/../.."
-export COMPOSE_FILE=docker-compose.prod.yml
+export COMPOSE_FILE=docker-compose.yml
 
 DUMP="${1:?uso: restore-postgres.sh <arquivo.sql.gz>}"
 [ -f "$DUMP" ] || { echo "Arquivo não encontrado: $DUMP" >&2; exit 1; }

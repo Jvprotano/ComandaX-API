@@ -28,7 +28,7 @@ Pontos importantes:
 - **Dois repositórios git, sem um terceiro para deploy** — diferente dos
   outros projetos, `ComandaX-API` e `comandax-front` são repositórios
   separados clonados lado a lado. Os arquivos de orquestração
-  (`docker-compose.prod.yml`, `.env.example`, `deploy/`) moram **dentro do
+  (`docker-compose.yml`, `.env.example`, `deploy/`) moram **dentro do
   repo da API**, na raiz. O compose builda a API a partir de `.` e o front a
   partir de `../comandax-front` (repo irmão). O `deploy.sh` dá `git pull` nos
   dois repositórios.
@@ -53,29 +53,29 @@ Pontos importantes:
 Todos vivem dentro do repo `ComandaX-API` (não há um terceiro repo só de
 deploy):
 
-| Arquivo                               | Função                                                |
-| -------------------------------------- | ----------------------------------------------------- |
-| `ComandaX-API/Dockerfile`              | Build multi-stage da API (.NET 8, não-root, curl)     |
-| `comandax-front/Dockerfile`            | Build do Angular + nginx servindo o SPA (repo irmão)  |
-| `comandax-front/nginx.conf`            | Nginx interno: SPA + proxy `/graphql` e `/api`        |
-| `comandax-front/security-headers.inc`  | CSP e cabeçalhos de segurança do SPA                  |
-| `ComandaX-API/docker-compose.prod.yml` | Orquestra `db` + `api` + `web`                        |
-| `ComandaX-API/.env.example`            | Modelo do `.env` (porta, banco, segredos)             |
-| `ComandaX-API/deploy/nginx/comandax.conf` | Vhost do Nginx do **host** (TLS via certbot)       |
-| `ComandaX-API/deploy/deploy.sh`        | Script de atualização (backup + pull + build + up)    |
+| Arquivo                                           | Função                                               |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| `ComandaX-API/Dockerfile`                         | Build multi-stage da API (.NET 8, não-root, curl)    |
+| `comandax-front/Dockerfile`                       | Build do Angular + nginx servindo o SPA (repo irmão) |
+| `comandax-front/nginx.conf`                       | Nginx interno: SPA + proxy `/graphql` e `/api`       |
+| `comandax-front/security-headers.inc`             | CSP e cabeçalhos de segurança do SPA                 |
+| `ComandaX-API/docker-compose.yml`                 | Orquestra `db` + `api` + `web`                       |
+| `ComandaX-API/.env.example`                       | Modelo do `.env` (porta, banco, segredos)            |
+| `ComandaX-API/deploy/nginx/comandax.conf`         | Vhost do Nginx do **host** (TLS via certbot)         |
+| `ComandaX-API/deploy/deploy.sh`                   | Script de atualização (backup + pull + build + up)   |
 | `ComandaX-API/deploy/scripts/backup-postgres.sh`  | Dump comprimido em `./backups` (retém os 14 últimos) |
 | `ComandaX-API/deploy/scripts/restore-postgres.sh` | Restaura um dump (destrutivo, pede confirmação)      |
 
-Os scripts em `deploy/` já exportam `COMPOSE_FILE=docker-compose.prod.yml`
+Os scripts em `deploy/` já exportam `COMPOSE_FILE=docker-compose.yml`
 antes de chamar `docker compose`, então funcionam sozinhos. Para comandos
 manuais (seções abaixo), rode uma vez por sessão de shell, dentro de
 `~/comandax/ComandaX-API`:
 
 ```bash
-export COMPOSE_FILE=docker-compose.prod.yml
+export COMPOSE_FILE=docker-compose.yml
 ```
 
-ou passe `-f docker-compose.prod.yml` em cada comando.
+ou passe `-f docker-compose.yml` em cada comando.
 
 ## Primeiro deploy (passo a passo)
 
@@ -94,14 +94,14 @@ git clone <url-do-repo-do-front> comandax-front
 cd ComandaX-API
 ```
 
-Os arquivos de orquestração (`docker-compose.prod.yml`, `.env.example`,
+Os arquivos de orquestração (`docker-compose.yml`, `.env.example`,
 `deploy/`) já vêm com o clone do `ComandaX-API` — não precisa copiar nada à
 parte nem criar um repo extra. Dali em diante, todo comando deste guia roda
 de dentro de `~/comandax/ComandaX-API`.
 
 ```bash
 chmod +x deploy/deploy.sh deploy/scripts/*.sh
-export COMPOSE_FILE=docker-compose.prod.yml
+export COMPOSE_FILE=docker-compose.yml
 ```
 
 ### 3. Configurar o `.env`
@@ -224,8 +224,8 @@ Restaurar:
 
 ## Operação
 
-Rode a partir de `~/comandax/ComandaX-API`, com `COMPOSE_FILE=docker-compose.prod.yml`
-exportado na sessão (passo 2) — senão, adicione `-f docker-compose.prod.yml`
+Rode a partir de `~/comandax/ComandaX-API`, com `COMPOSE_FILE=docker-compose.yml`
+exportado na sessão (passo 2) — senão, adicione `-f docker-compose.yml`
 em cada comando abaixo.
 
 ```bash
@@ -243,13 +243,13 @@ docker compose exec db psql -U comandax -d comandax   # console do banco
 
 ## Troubleshooting
 
-| Sintoma                                  | Causa provável                                | Correção                                                              |
-| ---------------------------------------- | --------------------------------------------- | --------------------------------------------------------------------- |
-| API não sobe / reinicia em loop          | `.env` incompleto (`Jwt__Key` vazio) ou senha do banco divergente do volume | `docker compose logs api`; ver nota sobre `POSTGRES_PASSWORD` acima |
-| `502 Bad Gateway`                        | Containers fora do ar ou porta errada         | `docker compose ps`; confira `COMANDAX_WEB_PORT` no `.env` vs. vhost  |
-| Porta 8110 em uso                        | Conflito com outro serviço da VPS             | Mude `COMANDAX_WEB_PORT` no `.env` e no vhost                         |
-| Botão do Google não aparece              | Domínio não autorizado no Google Console      | Passo 7                                                               |
-| SPA abre, mas login falha com CORS       | Front apontando para URL antiga do Render     | Confirme `apiUrl: '/graphql'` no `environment.prod.ts` e rebuild `web`|
-| Recibo por e-mail não chega              | `RESEND_APITOKEN` vazio ou domínio não verificado no Resend | Preencha o token e reinicie: `docker compose up -d api` |
-| `429 Too Many Requests`                  | Rate limiting do nginx do host                | Esperado sob abuso; ajuste `rate=20r/s` no vhost se atingir uso real  |
-| Build falha em `npm ci`                  | `package-lock.json` fora de sincronia         | Na máquina de dev: `npm install` e commite o lockfile                 |
+| Sintoma                            | Causa provável                                                              | Correção                                                               |
+| ---------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| API não sobe / reinicia em loop    | `.env` incompleto (`Jwt__Key` vazio) ou senha do banco divergente do volume | `docker compose logs api`; ver nota sobre `POSTGRES_PASSWORD` acima    |
+| `502 Bad Gateway`                  | Containers fora do ar ou porta errada                                       | `docker compose ps`; confira `COMANDAX_WEB_PORT` no `.env` vs. vhost   |
+| Porta 8110 em uso                  | Conflito com outro serviço da VPS                                           | Mude `COMANDAX_WEB_PORT` no `.env` e no vhost                          |
+| Botão do Google não aparece        | Domínio não autorizado no Google Console                                    | Passo 7                                                                |
+| SPA abre, mas login falha com CORS | Front apontando para URL antiga do Render                                   | Confirme `apiUrl: '/graphql'` no `environment.prod.ts` e rebuild `web` |
+| Recibo por e-mail não chega        | `RESEND_APITOKEN` vazio ou domínio não verificado no Resend                 | Preencha o token e reinicie: `docker compose up -d api`                |
+| `429 Too Many Requests`            | Rate limiting do nginx do host                                              | Esperado sob abuso; ajuste `rate=20r/s` no vhost se atingir uso real   |
+| Build falha em `npm ci`            | `package-lock.json` fora de sincronia                                       | Na máquina de dev: `npm install` e commite o lockfile                  |
