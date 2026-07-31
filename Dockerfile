@@ -17,5 +17,15 @@ RUN dotnet publish ComandaX.WebAPI/ComandaX.WebAPI.csproj -c Release -o /app/pub
 # Final stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
+
+# curl é usado pelo healthcheck do Docker Compose.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/publish .
+
+# Roda como usuário não-root (o "app" já existe nas imagens .NET 8+).
+USER app
+
 ENTRYPOINT ["dotnet", "ComandaX.WebAPI.dll"]

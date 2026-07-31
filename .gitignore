@@ -52,3 +52,7 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Deploy (segredos e dumps de banco, nunca versionados)
+.env
+/backups/

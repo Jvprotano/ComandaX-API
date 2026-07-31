@@ -1,24 +1,49 @@
-version: "3.8"
 services:
-  postgres:
-    image: postgres:16
+  db:
+    image: postgres:17-alpine
+    container_name: comandax-db
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: comandax
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${POSTGRES_USER:-comandax}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      POSTGRES_DB: ${POSTGRES_DB:-comandax}
+    healthcheck:
+      test:
+        ["CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
   api:
     build: .
-    ports:
-      - "5012:8080"
-    depends_on:
-      - postgres
+    container_name: comandax-api
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      ConnectionStrings__DefaultConnection: "Server=postgres;Database=comandax;User Id=postgres;Password=postgres;"
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Production}
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-comandax};Username=${POSTGRES_USER:-comandax};Password=${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ../comandax-front
+    container_name: comandax-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${COMANDAX_WEB_PORT:-8110}:80"
+    depends_on:
+      api:
+        condition: service_healthy
 
 volumes:
-  postgres-data:
+  pgdata:

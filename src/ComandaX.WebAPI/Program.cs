@@ -92,7 +92,12 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+// Em produção o TLS termina no proxy reverso (nginx); redirecionar aqui
+// geraria loop ou redirect para uma porta https inexistente no container.
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("RestrictedPolicy");
 
@@ -111,6 +116,9 @@ app.MapControllers();
 app.MapGraphQL("/graphql");
 
 app.MapGet("/", () => "API running ✅");
+
+// Sonda de saúde usada pelo healthcheck do Docker Compose.
+app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
 
 using (var scope = app.Services.CreateScope())
 {
